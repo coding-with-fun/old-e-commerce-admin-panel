@@ -7,11 +7,10 @@ const Layout = (): JSX.Element => {
         <Box
             sx={{
                 display: 'flex',
+                minHeight: '100vh',
             }}
         >
-            <div className="content">
-                <Outlet />
-            </div>
+            <Outlet />
         </Box>
     );
 };
