@@ -1,17 +1,16 @@
-import Button from '@mui/material/Button';
-import React from 'react';
-import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import PasswordInput from '../../../components/PasswordInput';
 import { useFormik } from 'formik';
-import schema from './formValidator';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
+import PasswordInput from '../../../components/PasswordInput';
+import schema from './formValidator';
 
 const SignIn = (): JSX.Element => {
     const formik = useFormik({
         initialValues: {
-            id: '',
+            email: '',
             password: '',
         },
         validationSchema: toFormikValidationSchema(schema),
@@ -19,8 +18,6 @@ const SignIn = (): JSX.Element => {
             console.log(JSON.stringify(values, null, 2));
         },
     });
-
-    console.log(formik.errors);
 
     return (
         <Box
@@ -42,20 +39,26 @@ const SignIn = (): JSX.Element => {
                 component="form"
                 noValidate
                 autoComplete="off"
+                sx={{
+                    width: '450px',
+                }}
                 onSubmit={formik.handleSubmit}
             >
                 <TextField
-                    id="id"
-                    label="Email / Contact number"
+                    id="email"
+                    label="Email"
                     variant="outlined"
                     margin="dense"
-                    value={formik.values.id}
+                    value={formik.values.email}
                     onChange={formik.handleChange}
                     fullWidth={true}
                     error={
-                        formik.touched.id === true && Boolean(formik.errors.id)
+                        formik.touched.email === true &&
+                        Boolean(formik.errors.email)
                     }
-                    helperText={formik.touched.id === true && formik.errors.id}
+                    helperText={
+                        formik.touched.email === true && formik.errors.email
+                    }
                 />
                 <PasswordInput
                     id="password"

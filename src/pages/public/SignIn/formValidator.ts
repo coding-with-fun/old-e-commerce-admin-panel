@@ -1,9 +1,11 @@
 import { z } from 'zod';
 
 const schema = z.object({
-    id: z.string({
-        required_error: 'Email or Contact number is required.',
-    }),
+    email: z
+        .string({
+            required_error: 'Email is required.',
+        })
+        .email('Please enter a valid email address.'),
     password: z.string({
         required_error: 'Password is required.',
     }),

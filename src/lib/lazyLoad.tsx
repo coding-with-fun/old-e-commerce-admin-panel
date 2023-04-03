@@ -1,7 +1,7 @@
-import React, { Suspense } from 'react';
+import { type LazyExoticComponent, Suspense } from 'react';
 
 const lazyLoad = (
-    LazyElement: React.LazyExoticComponent<() => JSX.Element>
+    LazyElement: LazyExoticComponent<() => JSX.Element>
 ): JSX.Element => {
     return (
         <Suspense fallback="Loading...">
