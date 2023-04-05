@@ -17,7 +17,7 @@ const SignIn = (): JSX.Element => {
                 width: '100%',
             }}
         >
-            {!enterOtp ? (
+            {enterOtp ? (
                 <OtpScreen email={email} />
             ) : (
                 <SignInForm setEmail={setEmail} setEnterOtp={setEnterOtp} />
