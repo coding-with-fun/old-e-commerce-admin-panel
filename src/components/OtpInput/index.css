@@ -1,0 +1,13 @@
+input {
+    height: 3rem;
+    width: 3rem;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    font-size: 2rem;
+    outline: 0;
+
+    text-align: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
