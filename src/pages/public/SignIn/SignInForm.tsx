@@ -1,17 +1,25 @@
-import axios from 'axios';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { useMutation } from '@tanstack/react-query';
 import { useFormik } from 'formik';
-import { toFormikValidationSchema } from 'zod-formik-adapter';
-import PasswordInput from '../../../components/PasswordInput';
-import schema from './formValidator';
+import _ from 'lodash';
 import { Link } from 'react-router-dom';
+import { toFormikValidationSchema } from 'zod-formik-adapter';
+import { SignInAPI } from '../../../apis/auth';
+import PasswordInput from '../../../components/PasswordInput';
+import toast from '../../../libs/toast';
 import routes from '../../../router/routes';
+import schema from './formValidator';
+import PageLoader from '../../../components/PageLoader';
 
 const SignInForm = (props: PropTypes): JSX.Element => {
     const { setEmail, setEnterOtp } = props;
+
+    const { mutate, isLoading } = useMutation({
+        mutationFn: SignInAPI,
+    });
 
     const formik = useFormik({
         initialValues: {
@@ -20,16 +28,30 @@ const SignInForm = (props: PropTypes): JSX.Element => {
         },
         validationSchema: toFormikValidationSchema(schema),
         onSubmit: async (values) => {
-            console.log(JSON.stringify(values, null, 2));
-            const response = await axios.get('');
-            console.log(response);
+            mutate(values, {
+                onError: (error) => {
+                    toast(_.get(error, 'message', ''));
+                },
+                onSuccess: (data, variables, context) => {
+                    toast(_.get(data, 'message', ''), 'success');
+                    setEmail(variables.email);
+                    setEnterOtp(true);
+                },
+                onSettled: () => {
+                    formik.resetForm();
 
-            setEmail(values.email);
-            setEnterOtp(true);
+                    const emailInput = document.getElementById('email');
+                    if (emailInput != null) {
+                        emailInput.focus();
+                    }
+                },
+            });
         },
     });
 
-    return (
+    return isLoading === true ? (
+        <PageLoader />
+    ) : (
         <Box
             sx={{
                 width: '450px',
@@ -55,6 +77,7 @@ const SignInForm = (props: PropTypes): JSX.Element => {
             >
                 <TextField
                     fullWidth
+                    autoFocus
                     id="email"
                     label="Email"
                     variant="outlined"

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import _ from 'lodash';
 import { getUserToken } from '../utils/manageUserToken';
 
 axios.defaults.baseURL = 'http://localhost:8000';
@@ -30,15 +31,16 @@ axios.interceptors.response.use(
     function (response) {
         // Any status code that lie within the range of 2xx cause this function to trigger
         // Do something with response data
-        console.log({
-            response,
-        });
+
+        if (_.get(response, 'data.success') === false) {
+            return Promise.reject(response.data);
+        }
 
         return response.data;
     },
     async function (error) {
         // Any status codes that falls outside the range of 2xx cause this function to trigger
         // Do something with response error
-        return await Promise.reject(error);
+        return await Promise.reject(error.response.data);
     }
 );

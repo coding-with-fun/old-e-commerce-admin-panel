@@ -10,5 +10,6 @@ const schema = z.object({
         required_error: 'Password is required.',
     }),
 });
+export type SignInFormSchemaType = z.infer<typeof schema>;
 
 export default schema;
