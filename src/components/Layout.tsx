@@ -1,19 +1,34 @@
 import { Box } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
+import { DrawerHeader } from './Navbar/Sidebar';
 
 const Layout = (): JSX.Element => {
     return (
-        <Box>
+        <Box
+            sx={{
+                display: 'flex',
+            }}
+        >
             <Navbar />
 
             <Box
+                component="main"
                 sx={{
-                    display: 'flex',
-                    minHeight: '100vh',
+                    flexGrow: 1,
+                    p: 3,
                 }}
             >
-                <Outlet />
+                <DrawerHeader />
+
+                <Box
+                    sx={{
+                        display: 'flex',
+                        minHeight: 'calc(100vh - 7rem)',
+                    }}
+                >
+                    <Outlet />
+                </Box>
             </Box>
         </Box>
     );
