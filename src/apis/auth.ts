@@ -7,3 +7,10 @@ export const SignInAPI = async (
 ): Promise<AxiosResponse<any, any>> => {
     return await axios.post(endpoints.auth.signin, body);
 };
+
+export const VerifySignInOtpAPI = async (body: {
+    otp: string;
+    email: string;
+}): Promise<AxiosResponse<any, any>> => {
+    return await axios.post(endpoints.auth.verifySignInOtp, body);
+};

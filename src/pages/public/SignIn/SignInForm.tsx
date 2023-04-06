@@ -8,11 +8,11 @@ import _ from 'lodash';
 import { Link } from 'react-router-dom';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { SignInAPI } from '../../../apis/auth';
+import PageLoader from '../../../components/PageLoader';
 import PasswordInput from '../../../components/PasswordInput';
 import toast from '../../../libs/toast';
 import routes from '../../../router/routes';
 import schema from './formValidator';
-import PageLoader from '../../../components/PageLoader';
 
 const SignInForm = (props: PropTypes): JSX.Element => {
     const { setEmail, setEnterOtp } = props;
@@ -122,18 +122,6 @@ const SignInForm = (props: PropTypes): JSX.Element => {
                 <Box>
                     <Link to={routes.public.forgotPassword}>
                         <Typography>Forgot password?</Typography>
-                    </Link>
-                </Box>
-
-                <Box
-                    sx={{
-                        display: 'flex',
-                        gap: '4px',
-                    }}
-                >
-                    <Typography>Do not have an account?</Typography>
-                    <Link to={routes.public.signup}>
-                        <Typography>Sign Up</Typography>
                     </Link>
                 </Box>
             </Box>

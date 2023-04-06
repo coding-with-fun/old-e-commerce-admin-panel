@@ -1,6 +1,6 @@
 import axios from 'axios';
 import _ from 'lodash';
-import { getUserToken } from '../utils/manageUserToken';
+import { getUserToken, setUserToken } from '../utils/manageUserToken';
 
 axios.defaults.baseURL = 'http://localhost:8000';
 
@@ -34,6 +34,11 @@ axios.interceptors.response.use(
 
         if (_.get(response, 'data.success') === false) {
             return Promise.reject(response.data);
+        }
+
+        const token = _.get(response, 'data.token');
+        if (token != null && token !== '') {
+            setUserToken(token);
         }
 
         return response.data;

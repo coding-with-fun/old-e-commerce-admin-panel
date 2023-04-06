@@ -8,7 +8,6 @@ import PublicRoute from './PublicRoute';
 // Lazy loaded pages
 // Public pages
 const SignIn = React.lazy(async () => await import('../pages/public/SignIn'));
-const SignUp = React.lazy(async () => await import('../pages/public/SignUp'));
 const ForgotPassword = React.lazy(
     async () => await import('../pages/public/ForgotPassword')
 );
@@ -25,10 +24,6 @@ const router = createBrowserRouter([
             {
                 path: '/signin',
                 element: <PublicRoute>{lazyLoad(SignIn)}</PublicRoute>,
-            },
-            {
-                path: '/signup',
-                element: <PublicRoute>{lazyLoad(SignUp)}</PublicRoute>,
             },
             {
                 path: '/forgot-password',

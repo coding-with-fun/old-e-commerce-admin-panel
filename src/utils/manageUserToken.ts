@@ -7,3 +7,7 @@ export const getUserToken = (): string | null => {
 export const setUserToken = (token: string = ''): void => {
     localStorage.setItem(env.app.token_id, token);
 };
+
+export const removeUserToken = (): void => {
+    localStorage.removeItem(env.app.token_id);
+};
