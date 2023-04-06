@@ -1,10 +1,11 @@
 import { type LazyExoticComponent, Suspense } from 'react';
+import PageLoader from '../components/PageLoader';
 
 const lazyLoad = (
     LazyElement: LazyExoticComponent<() => JSX.Element>
 ): JSX.Element => {
     return (
-        <Suspense fallback="Loading...">
+        <Suspense fallback={<PageLoader />}>
             <LazyElement />
         </Suspense>
     );
