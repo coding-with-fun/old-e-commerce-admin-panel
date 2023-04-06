@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom';
-import { getUserToken } from '../utils/localToken';
+import { getUserToken } from '../utils/manageUserToken';
 
 const PublicRoute = ({ children }: { children: JSX.Element }): JSX.Element => {
     const token = getUserToken();

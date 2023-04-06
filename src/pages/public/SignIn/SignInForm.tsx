@@ -1,3 +1,4 @@
+import axios from 'axios';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -18,8 +19,11 @@ const SignInForm = (props: PropTypes): JSX.Element => {
             password: '',
         },
         validationSchema: toFormikValidationSchema(schema),
-        onSubmit: (values) => {
+        onSubmit: async (values) => {
             console.log(JSON.stringify(values, null, 2));
+            const response = await axios.get('');
+            console.log(response);
+
             setEmail(values.email);
             setEnterOtp(true);
         },

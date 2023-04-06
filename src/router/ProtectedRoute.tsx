@@ -1,5 +1,5 @@
 import { Navigate, useLocation } from 'react-router-dom';
-import { getUserToken } from '../utils/localToken';
+import { getUserToken } from '../utils/manageUserToken';
 
 const ProtectedRoute = ({
     children,

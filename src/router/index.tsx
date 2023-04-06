@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import Layout from '../components/Layout';
-import lazyLoad from '../lib/lazyLoad';
+import lazyLoad from '../libs/lazyLoad';
 import ProtectedRoute from './ProtectedRoute';
 import PublicRoute from './PublicRoute';
 
