@@ -1,15 +1,20 @@
 import { Box } from '@mui/material';
 import { Outlet } from 'react-router-dom';
+import Navbar from './Navbar';
 
 const Layout = (): JSX.Element => {
     return (
-        <Box
-            sx={{
-                display: 'flex',
-                minHeight: '100vh',
-            }}
-        >
-            <Outlet />
+        <Box>
+            <Navbar />
+
+            <Box
+                sx={{
+                    display: 'flex',
+                    minHeight: '100vh',
+                }}
+            >
+                <Outlet />
+            </Box>
         </Box>
     );
 };
