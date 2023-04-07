@@ -54,34 +54,49 @@ const OtpScreen = (props: PropTypes): JSX.Element => {
     return isLoading ? (
         <PageLoader />
     ) : (
-        <Box
-            sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '15px',
-            }}
-        >
-            {Array.from(
-                {
-                    length: otpLength,
-                },
-                (element: unknown, index: number) => {
-                    return (
-                        <Fragment key={index}>
-                            <OtpInput
-                                otp={otp}
-                                setOtp={setOtp}
-                                index={index}
-                                handleOtpSubmit={handleOtpSubmit}
-                            />
+        <Box>
+            <Box>
+                <Typography
+                    variant="h4"
+                    sx={{
+                        textAlign: 'center',
+                        mb: 4,
+                    }}
+                    gutterBottom
+                >
+                    OTP
+                </Typography>
+            </Box>
 
-                            {otpLength - index > 1 ? (
-                                <Typography>-</Typography>
-                            ) : null}
-                        </Fragment>
-                    );
-                }
-            )}
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '15px',
+                }}
+            >
+                {Array.from(
+                    {
+                        length: otpLength,
+                    },
+                    (element: unknown, index: number) => {
+                        return (
+                            <Fragment key={index}>
+                                <OtpInput
+                                    otp={otp}
+                                    setOtp={setOtp}
+                                    index={index}
+                                    handleOtpSubmit={handleOtpSubmit}
+                                />
+
+                                {otpLength - index > 1 ? (
+                                    <Typography>-</Typography>
+                                ) : null}
+                            </Fragment>
+                        );
+                    }
+                )}
+            </Box>
         </Box>
     );
 };
