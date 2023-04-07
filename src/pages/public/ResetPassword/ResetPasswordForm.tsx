@@ -9,12 +9,11 @@ import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { ResetPasswordAPI } from '../../../apis/auth';
 import PageLoader from '../../../components/PageLoader';
 import PasswordInput from '../../../components/PasswordInput';
-import toast from '../../../libs/toast';
 import routes from '../../../router/routes';
 import schema from './formValidator';
 
 const ResetPasswordForm = (props: PropTypes): JSX.Element => {
-    const { setPasswordUpdated, token } = props;
+    const { setPasswordUpdated, setErrorMessage, token } = props;
 
     const { mutate, isLoading } = useMutation({
         mutationFn: ResetPasswordAPI,
@@ -34,7 +33,7 @@ const ResetPasswordForm = (props: PropTypes): JSX.Element => {
                 },
                 {
                     onError: (error) => {
-                        toast(_.get(error, 'message', ''));
+                        setErrorMessage(_.get(error, 'message', ''));
                     },
                     onSuccess: () => {
                         setPasswordUpdated(true);
@@ -42,9 +41,10 @@ const ResetPasswordForm = (props: PropTypes): JSX.Element => {
                     onSettled: () => {
                         formik.resetForm();
 
-                        const emailInput = document.getElementById('email');
-                        if (emailInput != null) {
-                            emailInput.focus();
+                        const passwordInput =
+                            document.getElementById('password');
+                        if (passwordInput != null) {
+                            passwordInput.focus();
                         }
                     },
                 }
@@ -80,6 +80,7 @@ const ResetPasswordForm = (props: PropTypes): JSX.Element => {
             >
                 <PasswordInput
                     fullWidth
+                    autoFocus
                     id="password"
                     label="Password"
                     margin="dense"
@@ -140,5 +141,6 @@ export default ResetPasswordForm;
 
 interface PropTypes {
     setPasswordUpdated: React.Dispatch<React.SetStateAction<boolean>>;
+    setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
     token: string;
 }

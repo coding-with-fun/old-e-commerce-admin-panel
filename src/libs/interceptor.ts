@@ -1,8 +1,9 @@
 import axios from 'axios';
 import _ from 'lodash';
 import { getUserToken, setUserToken } from '../utils/manageUserToken';
+import env from '../env';
 
-axios.defaults.baseURL = 'http://localhost:8000';
+axios.defaults.baseURL = env.app.backend_url + env.app.api_prefix;
 
 // Add a request interceptor
 axios.interceptors.request.use(

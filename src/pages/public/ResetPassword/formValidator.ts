@@ -13,13 +13,9 @@ const schema = z
             })
             .nonempty('Confirmation password is required.'),
     })
-    .superRefine(({ confirmationPassword, password }, ctx) => {
-        if (confirmationPassword !== password) {
-            ctx.addIssue({
-                code: 'custom',
-                message: 'The passwords did not match',
-            });
-        }
+    .refine((data) => data.password === data.confirmationPassword, {
+        message: "Passwords don't match",
+        path: ['confirmationPassword'], // path of error
     });
 export type ResetPasswordFormSchemaType = z.infer<typeof schema>;
 

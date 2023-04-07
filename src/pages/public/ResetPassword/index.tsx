@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import { useSearchParams } from 'react-router-dom';
 import MessageScreen from './MessageScreen';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ResetPasswordForm from './ResetPasswordForm';
 
 const ResetPassword = (): JSX.Element => {
@@ -9,6 +9,13 @@ const ResetPassword = (): JSX.Element => {
     const token = searchParams.get('token');
 
     const [passwordUpdated, setPasswordUpdated] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
+    useEffect(() => {
+        if (token == null || token === '') {
+            setErrorMessage('Token not found');
+        }
+    }, [token]);
 
     return (
         <Box
@@ -22,11 +29,12 @@ const ResetPassword = (): JSX.Element => {
         >
             {passwordUpdated ? (
                 <MessageScreen />
-            ) : token == null || token === '' ? (
-                <MessageScreen message="Token not found." />
+            ) : errorMessage !== '' || token == null || token === '' ? (
+                <MessageScreen message={errorMessage ?? 'Token not found.'} />
             ) : (
                 <ResetPasswordForm
                     setPasswordUpdated={setPasswordUpdated}
+                    setErrorMessage={setErrorMessage}
                     token={token}
                 />
             )}
