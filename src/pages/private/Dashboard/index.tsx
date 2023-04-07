@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { removeUserToken } from '../../utils/manageUserToken';
+import { removeUserToken } from '../../../utils/manageUserToken';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard = (): JSX.Element => {

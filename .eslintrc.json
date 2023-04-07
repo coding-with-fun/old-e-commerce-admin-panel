@@ -18,7 +18,16 @@
         "project": ["./tsconfig.json"]
     },
     "plugins": ["react"],
-    "rules": {},
+    "rules": {
+        "no-unused-vars": [
+            "error",
+            {
+                "vars": "all",
+                "args": "after-used",
+                "ignoreRestSiblings": false
+            }
+        ]
+    },
     "settings": {
         "react": {
             "version": "detect"

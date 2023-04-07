@@ -87,7 +87,7 @@ const Navbar = (): JSX.Element => {
                             variant="h6"
                             noWrap
                             onClick={() => {
-                                navigate('/');
+                                navigate('/dashboard');
                             }}
                             sx={{
                                 mr: 2,
@@ -177,7 +177,12 @@ const Navbar = (): JSX.Element => {
                                 open={Boolean(anchorElUser)}
                                 onClose={handleCloseUserMenu}
                             >
-                                <MenuItem onClick={handleCloseUserMenu}>
+                                <MenuItem
+                                    onClick={() => {
+                                        navigate('/profile');
+                                        handleCloseUserMenu();
+                                    }}
+                                >
                                     <Typography textAlign="center">
                                         Profile
                                     </Typography>

@@ -33,7 +33,7 @@ const OtpScreen = (props: PropTypes): JSX.Element => {
                 onError: (error) => {
                     toast(_.get(error, 'message', ''));
                 },
-                onSuccess: (data, variables, context) => {
+                onSuccess: (data) => {
                     toast(_.get(data, 'message', ''), 'success');
                     console.log(tempOtp);
                     navigate('/dashboard', {
