@@ -3,7 +3,11 @@
     "ignorePaths": [],
     "dictionaryDefinitions": [],
     "dictionaries": [],
-    "words": ["formik", "inputerror"],
+    "words": [
+        "formik",
+        "inputerror",
+        "tanstack"
+    ],
     "ignoreWords": [],
     "import": []
 }

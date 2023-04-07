@@ -16,12 +16,14 @@ import { Fragment, useState, type MouseEvent, useEffect } from 'react';
 import env from '../../env';
 import MiniDrawer from './Sidebar';
 import { getUserToken } from '../../utils/manageUserToken';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const settings = ['Profile', 'Logout'];
 
 const Navbar = (): JSX.Element => {
     const location = useLocation();
+    const navigate = useNavigate();
+
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
     const [openSideBar, setOpenSideBar] = useState(false);
     const [userToken, setUserToken] = useState(getUserToken());
@@ -77,7 +79,9 @@ const Navbar = (): JSX.Element => {
                             variant="h6"
                             noWrap
                             component="a"
-                            href="/"
+                            onClick={() => {
+                                navigate('/');
+                            }}
                             sx={{
                                 mr: 2,
                                 display: {
@@ -89,6 +93,7 @@ const Navbar = (): JSX.Element => {
                                 letterSpacing: '.3rem',
                                 color: 'inherit',
                                 textDecoration: 'none',
+                                cursor: 'pointer',
                             }}
                         >
                             {env.app.app_name}

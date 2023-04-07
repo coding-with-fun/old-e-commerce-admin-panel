@@ -5,26 +5,24 @@ import Typography from '@mui/material/Typography';
 import { useMutation } from '@tanstack/react-query';
 import { useFormik } from 'formik';
 import _ from 'lodash';
-import { Link } from 'react-router-dom';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
-import { SignInAPI } from '../../../apis/auth';
+import { ForgotPasswordAPI } from '../../../apis/auth';
 import PageLoader from '../../../components/PageLoader';
-import PasswordInput from '../../../components/PasswordInput';
 import toast from '../../../libs/toast';
-import routes from '../../../router/routes';
 import schema from './formValidator';
+import { Link } from 'react-router-dom';
+import routes from '../../../router/routes';
 
-const SignInForm = (props: PropTypes): JSX.Element => {
-    const { setEmail, setEnterOtp } = props;
+const ForgotPasswordForm = (props: PropTypes): JSX.Element => {
+    const { setEmailSent } = props;
 
     const { mutate, isLoading } = useMutation({
-        mutationFn: SignInAPI,
+        mutationFn: ForgotPasswordAPI,
     });
 
     const formik = useFormik({
         initialValues: {
             email: '',
-            password: '',
         },
         validationSchema: toFormikValidationSchema(schema),
         onSubmit: async (values) => {
@@ -32,10 +30,8 @@ const SignInForm = (props: PropTypes): JSX.Element => {
                 onError: (error) => {
                     toast(_.get(error, 'message', ''));
                 },
-                onSuccess: (data, variables) => {
-                    toast(_.get(data, 'message', ''), 'success');
-                    setEmail(variables.email);
-                    setEnterOtp(true);
+                onSuccess: () => {
+                    setEmailSent(true);
                 },
                 onSettled: () => {
                     formik.resetForm();
@@ -65,7 +61,7 @@ const SignInForm = (props: PropTypes): JSX.Element => {
                     }}
                     gutterBottom
                 >
-                    Sign In
+                    Forgot Password
                 </Typography>
             </Box>
 
@@ -93,19 +89,6 @@ const SignInForm = (props: PropTypes): JSX.Element => {
                     }
                 />
 
-                <PasswordInput
-                    fullWidth
-                    id="password"
-                    label="Password"
-                    margin="dense"
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                    inputerror={{
-                        error: formik.touched.password,
-                        helperText: formik.errors.password,
-                    }}
-                />
-
                 <Button
                     fullWidth
                     color="primary"
@@ -121,9 +104,15 @@ const SignInForm = (props: PropTypes): JSX.Element => {
             </Box>
 
             <Box>
-                <Box>
-                    <Link to={routes.public.forgotPassword}>
-                        <Typography>Forgot password?</Typography>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        gap: '4px',
+                    }}
+                >
+                    <Typography>Remember password?</Typography>
+                    <Link to={routes.public.signin}>
+                        <Typography>Sign In</Typography>
                     </Link>
                 </Box>
             </Box>
@@ -131,9 +120,8 @@ const SignInForm = (props: PropTypes): JSX.Element => {
     );
 };
 
-export default SignInForm;
+export default ForgotPasswordForm;
 
 interface PropTypes {
-    setEmail: React.Dispatch<React.SetStateAction<string>>;
-    setEnterOtp: React.Dispatch<React.SetStateAction<boolean>>;
+    setEmailSent: React.Dispatch<React.SetStateAction<boolean>>;
 }

@@ -51,7 +51,7 @@ const OtpScreen = (props: PropTypes): JSX.Element => {
         );
     };
 
-    return isLoading === true ? (
+    return isLoading ? (
         <PageLoader />
     ) : (
         <Box

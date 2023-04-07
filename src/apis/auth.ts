@@ -14,3 +14,9 @@ export const VerifySignInOtpAPI = async (body: {
 }): Promise<AxiosResponse<any, any>> => {
     return await axios.post(endpoints.auth.verifySignInOtp, body);
 };
+
+export const ForgotPasswordAPI = async (body: {
+    email: string;
+}): Promise<AxiosResponse<any, any>> => {
+    return await axios.post(endpoints.auth.forgotPassword, body);
+};
