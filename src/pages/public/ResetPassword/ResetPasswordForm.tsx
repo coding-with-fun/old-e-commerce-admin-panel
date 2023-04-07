@@ -1,47 +1,54 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { useMutation } from '@tanstack/react-query';
 import { useFormik } from 'formik';
 import _ from 'lodash';
-import { toFormikValidationSchema } from 'zod-formik-adapter';
-import { ForgotPasswordAPI } from '../../../apis/auth';
-import PageLoader from '../../../components/PageLoader';
-import toast from '../../../libs/toast';
-import schema from './formValidator';
 import { Link } from 'react-router-dom';
+import { toFormikValidationSchema } from 'zod-formik-adapter';
+import { ResetPasswordAPI } from '../../../apis/auth';
+import PageLoader from '../../../components/PageLoader';
+import PasswordInput from '../../../components/PasswordInput';
+import toast from '../../../libs/toast';
 import routes from '../../../router/routes';
+import schema from './formValidator';
 
-const ForgotPasswordForm = (props: PropTypes): JSX.Element => {
-    const { setEmailSent } = props;
+const ResetPasswordForm = (props: PropTypes): JSX.Element => {
+    const { setPasswordUpdated, token } = props;
 
     const { mutate, isLoading } = useMutation({
-        mutationFn: ForgotPasswordAPI,
+        mutationFn: ResetPasswordAPI,
     });
 
     const formik = useFormik({
         initialValues: {
-            email: '',
+            password: '',
+            confirmationPassword: '',
         },
         validationSchema: toFormikValidationSchema(schema),
         onSubmit: async (values) => {
-            mutate(values, {
-                onError: (error) => {
-                    toast(_.get(error, 'message', ''));
+            mutate(
+                {
+                    password: values.password,
+                    token,
                 },
-                onSuccess: () => {
-                    setEmailSent(true);
-                },
-                onSettled: () => {
-                    formik.resetForm();
+                {
+                    onError: (error) => {
+                        toast(_.get(error, 'message', ''));
+                    },
+                    onSuccess: () => {
+                        setPasswordUpdated(true);
+                    },
+                    onSettled: () => {
+                        formik.resetForm();
 
-                    const emailInput = document.getElementById('email');
-                    if (emailInput != null) {
-                        emailInput.focus();
-                    }
-                },
-            });
+                        const emailInput = document.getElementById('email');
+                        if (emailInput != null) {
+                            emailInput.focus();
+                        }
+                    },
+                }
+            );
         },
     });
 
@@ -61,7 +68,7 @@ const ForgotPasswordForm = (props: PropTypes): JSX.Element => {
                     }}
                     gutterBottom
                 >
-                    Forgot Password
+                    Reset Password
                 </Typography>
             </Box>
 
@@ -71,22 +78,30 @@ const ForgotPasswordForm = (props: PropTypes): JSX.Element => {
                 autoComplete="off"
                 onSubmit={formik.handleSubmit}
             >
-                <TextField
+                <PasswordInput
                     fullWidth
-                    autoFocus
-                    id="email"
-                    label="Email"
-                    variant="outlined"
+                    id="password"
+                    label="Password"
                     margin="dense"
-                    value={formik.values.email}
+                    value={formik.values.password}
                     onChange={formik.handleChange}
-                    error={
-                        formik.touched.email === true &&
-                        Boolean(formik.errors.email)
-                    }
-                    helperText={
-                        formik.touched.email === true && formik.errors.email
-                    }
+                    inputerror={{
+                        error: formik.touched.password,
+                        helperText: formik.errors.password,
+                    }}
+                />
+
+                <PasswordInput
+                    fullWidth
+                    id="confirmationPassword"
+                    label="Confirmation Password"
+                    margin="dense"
+                    value={formik.values.confirmationPassword}
+                    onChange={formik.handleChange}
+                    inputerror={{
+                        error: formik.touched.confirmationPassword,
+                        helperText: formik.errors.confirmationPassword,
+                    }}
                 />
 
                 <Button
@@ -99,7 +114,7 @@ const ForgotPasswordForm = (props: PropTypes): JSX.Element => {
                         mb: 2,
                     }}
                 >
-                    Send password reset email
+                    Reset Password
                 </Button>
             </Box>
 
@@ -121,8 +136,9 @@ const ForgotPasswordForm = (props: PropTypes): JSX.Element => {
     );
 };
 
-export default ForgotPasswordForm;
+export default ResetPasswordForm;
 
 interface PropTypes {
-    setEmailSent: React.Dispatch<React.SetStateAction<boolean>>;
+    setPasswordUpdated: React.Dispatch<React.SetStateAction<boolean>>;
+    token: string;
 }

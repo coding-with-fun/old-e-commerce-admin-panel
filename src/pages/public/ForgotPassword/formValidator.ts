@@ -5,6 +5,7 @@ const schema = z.object({
         .string({
             required_error: 'Email is required.',
         })
+        .nonempty('Email is required.')
         .email('Please enter a valid email address.'),
 });
 export type ForgotPasswordFormSchemaType = z.infer<typeof schema>;

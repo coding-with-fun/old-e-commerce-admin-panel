@@ -1,10 +1,11 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const SuccessScreen = (): JSX.Element => {
+const MessageScreen = (props: PropTypes): JSX.Element => {
+    const { message } = props;
     const navigate = useNavigate();
 
     const [timeLeft, setTimeLeft] = useState(5);
@@ -36,9 +37,8 @@ const SuccessScreen = (): JSX.Element => {
             }}
         >
             <Box>
-                {' '}
                 <Typography variant="body1" component="p">
-                    The email has been sent to your email address successfully.
+                    {message ?? 'Your password has been updated successfully.'}
                 </Typography>
             </Box>
 
@@ -72,4 +72,8 @@ const SuccessScreen = (): JSX.Element => {
     );
 };
 
-export default SuccessScreen;
+export default MessageScreen;
+
+interface PropTypes {
+    message?: string;
+}

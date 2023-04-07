@@ -22,7 +22,7 @@ export const ForgotPasswordAPI = async (body: {
 };
 
 export const ResetPasswordAPI = async (body: {
-    email: string;
+    password: string;
     token: string;
 }): Promise<AxiosResponse<any, any>> => {
     return await axios.post(endpoints.auth.resetPassword, body);

@@ -5,6 +5,7 @@ const schema = z.object({
         .string({
             required_error: 'Email is required.',
         })
+        .nonempty('Email is required.')
         .email('Please enter a valid email address.'),
     password: z.string({
         required_error: 'Password is required.',
