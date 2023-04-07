@@ -78,7 +78,6 @@ const Navbar = (): JSX.Element => {
                         <Typography
                             variant="h6"
                             noWrap
-                            component="a"
                             onClick={() => {
                                 navigate('/');
                             }}

@@ -99,7 +99,7 @@ const ForgotPasswordForm = (props: PropTypes): JSX.Element => {
                         mb: 2,
                     }}
                 >
-                    Sign In
+                    Send password reset email
                 </Button>
             </Box>
 

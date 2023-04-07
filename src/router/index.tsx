@@ -11,6 +11,9 @@ const SignIn = React.lazy(async () => await import('../pages/public/SignIn'));
 const ForgotPassword = React.lazy(
     async () => await import('../pages/public/ForgotPassword')
 );
+const ResetPassword = React.lazy(
+    async () => await import('../pages/public/ResetPassword')
+);
 
 // Private pages
 const Dashboard = React.lazy(
@@ -28,6 +31,10 @@ const router = createBrowserRouter([
             {
                 path: '/forgot-password',
                 element: <PublicRoute>{lazyLoad(ForgotPassword)}</PublicRoute>,
+            },
+            {
+                path: '/reset-password',
+                element: <PublicRoute>{lazyLoad(ResetPassword)}</PublicRoute>,
             },
             {
                 path: '/dashboard',
