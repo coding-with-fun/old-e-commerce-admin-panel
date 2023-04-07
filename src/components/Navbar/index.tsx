@@ -12,13 +12,13 @@ import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import { Fragment, useState, type MouseEvent, useEffect } from 'react';
-import env from '../../env';
-import MiniDrawer from './Sidebar';
-import { getUserToken } from '../../utils/manageUserToken';
+import { Fragment, useEffect, useState, type MouseEvent } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import env from '../../env';
+import { getUserToken, removeUserToken } from '../../utils/manageUserToken';
+import MiniDrawer from './Sidebar';
 
-const settings = ['Profile', 'Logout'];
+// const settings = ['Profile', 'Sign Out'];
 
 const Navbar = (): JSX.Element => {
     const location = useLocation();
@@ -40,6 +40,14 @@ const Navbar = (): JSX.Element => {
     };
     const handleDrawerClose = (): void => {
         setOpenSideBar(false);
+    };
+
+    const handleSignOut = (): void => {
+        removeUserToken();
+        navigate('/signin', {
+            replace: true,
+        });
+        handleCloseUserMenu();
     };
 
     useEffect(() => {
@@ -169,16 +177,17 @@ const Navbar = (): JSX.Element => {
                                 open={Boolean(anchorElUser)}
                                 onClose={handleCloseUserMenu}
                             >
-                                {settings.map((setting) => (
-                                    <MenuItem
-                                        key={setting}
-                                        onClick={handleCloseUserMenu}
-                                    >
-                                        <Typography textAlign="center">
-                                            {setting}
-                                        </Typography>
-                                    </MenuItem>
-                                ))}
+                                <MenuItem onClick={handleCloseUserMenu}>
+                                    <Typography textAlign="center">
+                                        Profile
+                                    </Typography>
+                                </MenuItem>
+
+                                <MenuItem onClick={handleSignOut}>
+                                    <Typography textAlign="center">
+                                        Sign Out
+                                    </Typography>
+                                </MenuItem>
                             </Menu>
                         </Box>
                     </Toolbar>
