@@ -1,12 +1,16 @@
 import axios from 'axios';
 import _ from 'lodash';
-import { getUserToken, setUserToken } from '../utils/manageUserToken';
 import env from '../env';
+import { getUserToken, setUserToken } from '../utils/manageUserToken';
 
-axios.defaults.baseURL = env.app.backend_url + env.app.api_prefix;
+export const baseURL = env.app.backend_url + env.app.api_prefix;
+
+const axiosInstance = axios.create({
+    baseURL,
+});
 
 // Add a request interceptor
-axios.interceptors.request.use(
+axiosInstance.interceptors.request.use(
     function (config) {
         // Do something before request is sent
 
@@ -28,7 +32,7 @@ axios.interceptors.request.use(
 );
 
 // Add a response interceptor
-axios.interceptors.response.use(
+axiosInstance.interceptors.response.use(
     function (response) {
         // Any status code that lie within the range of 2xx cause this function to trigger
         // Do something with response data
@@ -50,3 +54,5 @@ axios.interceptors.response.use(
         return await Promise.reject(error.response.data);
     }
 );
+
+export default axiosInstance;
