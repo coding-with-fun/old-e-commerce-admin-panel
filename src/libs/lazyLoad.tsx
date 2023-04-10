@@ -1,4 +1,4 @@
-import { type LazyExoticComponent, Suspense } from 'react';
+import { Suspense, type LazyExoticComponent } from 'react';
 import PageLoader from '../components/PageLoader';
 
 const lazyLoad = (

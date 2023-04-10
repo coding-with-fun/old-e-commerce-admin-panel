@@ -6,6 +6,7 @@ import { GetProfileAPI } from './apis/profile';
 import { useAppDispatch } from './hooks/redux';
 import { setUserDetails } from './redux/slice/user.slice';
 import _ from 'lodash';
+import { getUserToken } from './utils/manageUserToken';
 
 const App = (): JSX.Element => {
     const dispatch = useAppDispatch();
@@ -17,7 +18,10 @@ const App = (): JSX.Element => {
     };
 
     useEffect(() => {
-        void handleGetProfile();
+        const token = getUserToken();
+        if (token != null && token !== '') {
+            void handleGetProfile();
+        }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
