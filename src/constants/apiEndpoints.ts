@@ -5,6 +5,9 @@ const endpoints = {
         forgotPassword: '/admin/auth/forgot-password',
         resetPassword: '/reset-password',
     },
+    profile: {
+        details: '/admin/profile',
+    },
 };
 
 export default endpoints;

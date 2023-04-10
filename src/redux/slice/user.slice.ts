@@ -2,8 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 import { type RootState } from '../store';
 
 export interface IUser {
-    _id: any;
+    _id: string;
     name: string;
+    profilePicture: string | undefined;
     email: string;
     newEmail: string | undefined;
     contactNumber: string;

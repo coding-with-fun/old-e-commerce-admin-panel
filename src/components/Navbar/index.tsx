@@ -12,9 +12,11 @@ import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
+import _ from 'lodash';
 import { Fragment, useEffect, useState, type MouseEvent } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import env from '../../env';
+import { useAppSelector } from '../../hooks/redux';
 import { getUserToken, removeUserToken } from '../../utils/manageUserToken';
 import MiniDrawer from './Sidebar';
 
@@ -23,6 +25,8 @@ import MiniDrawer from './Sidebar';
 const Navbar = (): JSX.Element => {
     const location = useLocation();
     const navigate = useNavigate();
+
+    const userDetails = useAppSelector((state) => state.user.userDetails);
 
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
     const [openSideBar, setOpenSideBar] = useState(false);
@@ -155,8 +159,12 @@ const Navbar = (): JSX.Element => {
                                     }}
                                 >
                                     <Avatar
-                                        alt="Remy Sharp"
-                                        src="/static/images/avatar/2.jpg"
+                                        alt={_.get(userDetails, 'name')}
+                                        src={_.get(
+                                            userDetails,
+                                            'profilePicture',
+                                            undefined
+                                        )}
                                     />
                                 </IconButton>
                             </Tooltip>
