@@ -3,11 +3,13 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import { useFormik } from 'formik';
-import { toFormikValidationSchema } from 'zod-formik-adapter';
-import schema from './formValidator';
-import { useEffect, useState } from 'react';
-import { useAppSelector } from '../../../hooks/redux';
 import _ from 'lodash';
+import { useEffect, useState } from 'react';
+import { toFormikValidationSchema } from 'zod-formik-adapter';
+import PageLoader from '../../../components/PageLoader';
+import { useAppSelector } from '../../../hooks/redux';
+import Avatar from './Avatar';
+import schema from './formValidator';
 
 const DetailsForm = (): JSX.Element => {
     const userDetails = useAppSelector((state) => state.user.userDetails);
@@ -37,7 +39,7 @@ const DetailsForm = (): JSX.Element => {
         },
     });
 
-    return (
+    return userDetails != null ? (
         <Box
             sx={{
                 width: '450px',
@@ -51,6 +53,8 @@ const DetailsForm = (): JSX.Element => {
                 }}
             >
                 <Box>
+                    <Avatar user={userDetails} />
+
                     <Box
                         noValidate
                         component="form"
@@ -124,7 +128,6 @@ const DetailsForm = (): JSX.Element => {
                             type="submit"
                             sx={{
                                 mt: 3,
-                                mb: 2,
                             }}
                         >
                             Save
@@ -133,6 +136,8 @@ const DetailsForm = (): JSX.Element => {
                 </Box>
             </Paper>
         </Box>
+    ) : (
+        <PageLoader />
     );
 };
 
