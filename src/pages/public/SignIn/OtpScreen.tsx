@@ -8,8 +8,11 @@ import { VerifySignInOtpAPI } from '../../../apis/auth';
 import OtpInput from '../../../components/OtpInput';
 import PageLoader from '../../../components/PageLoader';
 import toast from '../../../libs/toast';
+import { useAppDispatch } from '../../../hooks/redux';
+import { setUserDetails } from '../../../redux/slice/user.slice';
 
 const OtpScreen = (props: PropTypes): JSX.Element => {
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     const otpLength = 4;
@@ -35,7 +38,11 @@ const OtpScreen = (props: PropTypes): JSX.Element => {
                 },
                 onSuccess: (data) => {
                     toast(_.get(data, 'message', ''), 'success');
-                    console.log(tempOtp);
+                    console.log({
+                        tempOtp,
+                        data,
+                    });
+                    dispatch(setUserDetails(_.get(data, 'admin', {})));
                     navigate('/dashboard', {
                         replace: true,
                     });

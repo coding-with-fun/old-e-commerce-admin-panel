@@ -1,7 +1,11 @@
 import axios from 'axios';
 import _ from 'lodash';
 import env from '../env';
-import { getUserToken, setUserToken } from '../utils/manageUserToken';
+import {
+    getUserToken,
+    removeUserToken,
+    setUserToken,
+} from '../utils/manageUserToken';
 
 export const baseURL = env.app.backend_url + env.app.api_prefix;
 
@@ -50,7 +54,12 @@ axiosInstance.interceptors.response.use(
     },
     async function (error) {
         // Any status codes that falls outside the range of 2xx cause this function to trigger
-        // Do something with response error
+        // Do something with response
+
+        if (error.response.status === 401) {
+            removeUserToken();
+        }
+
         return await Promise.reject(error.response.data);
     }
 );
