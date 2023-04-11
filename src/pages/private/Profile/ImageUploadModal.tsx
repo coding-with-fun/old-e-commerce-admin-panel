@@ -1,20 +1,29 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
+import _ from 'lodash';
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import bg from '../../../assets/imageUploadModalBg.svg';
 import Modal from '../../../components/HOC/Modal';
+import { useUploadForm } from '../../../hooks/uploadFile';
+import { baseURL } from '../../../libs/interceptor';
 
 const ImageUploadModal = (props: PropTypes): JSX.Element => {
-    const { openImageUploadModal, handleCloseImageUploadModal } = props;
+    const { openImageUploadModal, handleCloseImageUploadModal, setNewAvatar } =
+        props;
+    const { uploadForm, progress, fileUploadStarted } = useUploadForm(
+        `${baseURL}/get-files-url`
+    );
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         if (acceptedFiles.length > 0) {
-            handleFilesUpload(acceptedFiles[0]);
+            void handleFilesUpload(acceptedFiles[0]);
         }
-    }, []);
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     const { getRootProps, getInputProps } = useDropzone({
         onDrop,
         accept: {
@@ -23,8 +32,16 @@ const ImageUploadModal = (props: PropTypes): JSX.Element => {
         },
     });
 
-    const handleFilesUpload = (file: File): void => {
+    const handleFilesUpload = async (file: File): Promise<void> => {
+        const formData = new FormData();
+        formData.append('filesToUpload', file);
         console.log(file);
+        const response = await uploadForm(formData);
+        setNewAvatar({
+            _id: _.get(response, 'data.urls[0]._id'),
+            url: _.get(response, 'data.urls[0].url'),
+        });
+        handleCloseImageUploadModal();
     };
 
     return (
@@ -113,28 +130,46 @@ const ImageUploadModal = (props: PropTypes): JSX.Element => {
                     Or
                 </Typography>
 
-                <Button
-                    variant="contained"
-                    component="label"
+                <Box
                     sx={{
                         mt: '1rem',
                     }}
                 >
-                    Choose a file
-                    <input
-                        hidden
-                        accept=".jpg, .png"
-                        type="file"
-                        onChange={(event) => {
-                            if (event.target.files != null) {
-                                handleFilesUpload(event.target.files[0]);
+                    {fileUploadStarted ? (
+                        <LinearProgress
+                            variant={
+                                progress === 100
+                                    ? 'indeterminate'
+                                    : 'determinate'
                             }
-                        }}
-                        onClick={(event) => {
-                            event.currentTarget.value = '';
-                        }}
-                    />
-                </Button>
+                            value={progress}
+                            sx={{
+                                width: 300,
+                            }}
+                        />
+                    ) : (
+                        <Button variant="contained" component="label">
+                            Choose a file
+                            <input
+                                hidden
+                                accept=".jpg, .png"
+                                type="file"
+                                onChange={(
+                                    event: React.ChangeEvent<HTMLInputElement>
+                                ) => {
+                                    if (event.target.files != null) {
+                                        void handleFilesUpload(
+                                            event.target.files[0]
+                                        );
+                                    }
+                                }}
+                                onClick={(event) => {
+                                    event.currentTarget.value = '';
+                                }}
+                            />
+                        </Button>
+                    )}
+                </Box>
             </Box>
         </Modal>
     );
@@ -145,4 +180,10 @@ export default ImageUploadModal;
 interface PropTypes {
     openImageUploadModal: boolean;
     handleCloseImageUploadModal: () => void;
+    setNewAvatar: React.Dispatch<
+        React.SetStateAction<{
+            _id: string;
+            url: string;
+        }>
+    >;
 }

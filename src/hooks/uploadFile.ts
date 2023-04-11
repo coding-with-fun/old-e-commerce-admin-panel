@@ -1,20 +1,25 @@
-import axios from 'axios';
+import axios, { type AxiosResponse } from 'axios';
 import { useState } from 'react';
 
 export const useUploadForm = (
     url: string
 ): {
-    uploadForm: (formData: FormData) => Promise<void>;
+    uploadForm: (formData: FormData) => Promise<AxiosResponse<any, any>>;
     isSuccess: boolean;
+    fileUploadStarted: boolean;
     progress: number;
     size: number;
 } => {
     const [isSuccess, setIsSuccess] = useState(false);
     const [size, setSize] = useState(0);
     const [progress, setProgress] = useState(0);
+    const [fileUploadStarted, setFileUploadStarted] = useState(false);
 
-    const uploadForm = async (formData: FormData): Promise<void> => {
-        await axios.post(url, formData, {
+    const uploadForm = async (
+        formData: FormData
+    ): Promise<AxiosResponse<any, any>> => {
+        setFileUploadStarted(true);
+        const response = await axios.post(url, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -38,7 +43,10 @@ export const useUploadForm = (
             },
         });
         setIsSuccess(true);
+        setFileUploadStarted(false);
+
+        return response;
     };
 
-    return { uploadForm, isSuccess, progress, size };
+    return { uploadForm, isSuccess, progress, size, fileUploadStarted };
 };

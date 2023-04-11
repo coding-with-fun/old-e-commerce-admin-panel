@@ -9,6 +9,12 @@ import ImageUploadModal from './ImageUploadModal';
 
 const Avatar = (props: PropTypes): JSX.Element => {
     const [openImageUploadModal, setOpenImageUploadModal] = useState(false);
+    const [newAvatar, setNewAvatar] = useState({
+        _id: '',
+        url: '',
+    });
+
+    console.log(newAvatar);
 
     const handleOpenImageUploadModal = (): void => {
         setOpenImageUploadModal(true);
@@ -33,7 +39,11 @@ const Avatar = (props: PropTypes): JSX.Element => {
                 >
                     <MuiAvatar
                         alt={props.user.name}
-                        src={props.user.profilePicture}
+                        src={
+                            newAvatar.url !== ''
+                                ? newAvatar.url
+                                : props.user.profilePicture
+                        }
                         sx={{
                             width: 120,
                             height: 120,
@@ -52,6 +62,7 @@ const Avatar = (props: PropTypes): JSX.Element => {
             <ImageUploadModal
                 openImageUploadModal={openImageUploadModal}
                 handleCloseImageUploadModal={handleCloseImageUploadModal}
+                setNewAvatar={setNewAvatar}
             />
         </Fragment>
     );
