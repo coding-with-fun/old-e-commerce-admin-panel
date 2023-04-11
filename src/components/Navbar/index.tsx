@@ -162,8 +162,7 @@ const Navbar = (): JSX.Element => {
                                         alt={_.get(userDetails, 'name')}
                                         src={_.get(
                                             userDetails,
-                                            'profilePicture',
-                                            undefined
+                                            'profilePictureId'
                                         )}
                                     />
                                 </IconButton>

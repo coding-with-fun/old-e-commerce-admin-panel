@@ -4,7 +4,7 @@ import { type RootState } from '../store';
 export interface IUser {
     _id: string;
     name: string;
-    profilePicture: string | undefined;
+    profilePictureId: string | undefined;
     email: string;
     newEmail: string | undefined;
     contactNumber: string;

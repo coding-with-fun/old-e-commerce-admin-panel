@@ -35,7 +35,6 @@ const ImageUploadModal = (props: PropTypes): JSX.Element => {
     const handleFilesUpload = async (file: File): Promise<void> => {
         const formData = new FormData();
         formData.append('filesToUpload', file);
-        console.log(file);
         const response = await uploadForm(formData);
         setNewAvatar({
             _id: _.get(response, 'data.urls[0]._id'),

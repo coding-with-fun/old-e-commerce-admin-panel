@@ -38,10 +38,6 @@ const OtpScreen = (props: PropTypes): JSX.Element => {
                 },
                 onSuccess: (data) => {
                     toast(_.get(data, 'message', ''), 'success');
-                    console.log({
-                        tempOtp,
-                        data,
-                    });
                     dispatch(setUserDetails(_.get(data, 'admin', {})));
                     navigate('/dashboard', {
                         replace: true,

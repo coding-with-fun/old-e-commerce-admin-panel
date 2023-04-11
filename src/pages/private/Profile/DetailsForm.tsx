@@ -7,12 +7,14 @@ import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import PageLoader from '../../../components/PageLoader';
-import { useAppSelector } from '../../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import Avatar from './Avatar';
 import schema from './formValidator';
+import { setUserDetails } from '../../../redux/slice/user.slice';
 
 const DetailsForm = (): JSX.Element => {
     const userDetails = useAppSelector((state) => state.user.userDetails);
+    const dispatch = useAppDispatch();
 
     const initialValues: InitialFormikDataInterface = {
         name: '',
@@ -21,6 +23,10 @@ const DetailsForm = (): JSX.Element => {
     };
     const [initialFormikData, setInitialFormikData] =
         useState<InitialFormikDataInterface>(initialValues);
+    const [newAvatar, setNewAvatar] = useState({
+        _id: '',
+        url: '',
+    });
 
     useEffect(() => {
         setInitialFormikData({
@@ -29,6 +35,17 @@ const DetailsForm = (): JSX.Element => {
             name: _.get(userDetails, 'name', ''),
         });
     }, [userDetails]);
+
+    useEffect(() => {
+        dispatch(
+            setUserDetails({
+                ...userDetails,
+                profilePictureId: newAvatar._id,
+            })
+        );
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [newAvatar]);
 
     const formik = useFormik({
         initialValues: initialFormikData,
@@ -53,7 +70,11 @@ const DetailsForm = (): JSX.Element => {
                 }}
             >
                 <Box>
-                    <Avatar user={userDetails} />
+                    <Avatar
+                        user={userDetails}
+                        newAvatar={newAvatar}
+                        setNewAvatar={setNewAvatar}
+                    />
 
                     <Box
                         noValidate
