@@ -2,18 +2,21 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
+import { useMutation } from '@tanstack/react-query';
 import { useFormik } from 'formik';
 import _ from 'lodash';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
+import { UpdateProfileAPI } from '../../../apis/profile';
+import Modal from '../../../components/HOC/Modal';
 import PageLoader from '../../../components/PageLoader';
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
+import toast from '../../../libs/toast';
 import { setUserDetails, type IUser } from '../../../redux/slice/user.slice';
 import Avatar from './Avatar';
+import ContactNumberUpdateModal from './ContactNumberUpdateModal';
+import EmailUpdateModal from './EmailUpdateModal';
 import schema from './formValidator';
-import { useMutation } from '@tanstack/react-query';
-import { UpdateProfileAPI } from '../../../apis/profile';
-import toast from '../../../libs/toast';
 
 const DetailsForm = (): JSX.Element => {
     const userDetails = useAppSelector((state) => state.user.userDetails);
@@ -37,6 +40,28 @@ const DetailsForm = (): JSX.Element => {
         url: '',
     });
 
+    // Modal flags
+    const [cleanModalContent, setCleanModalContent] = useState(false);
+
+    // Flags for contact number update modal
+    const [openContactNumberUpdateModal, setOpenContactNumberUpdateModal] =
+        useState(false);
+    const handleOpenContactNumberUpdateModal = (): void => {
+        setOpenContactNumberUpdateModal(true);
+    };
+    const handleCloseContactNumberUpdateModal = (): void => {
+        setOpenContactNumberUpdateModal(false);
+    };
+
+    // Flags for email update modal
+    const [openEmailUpdateModal, setOpenEmailUpdateModal] = useState(false);
+    const handleOpenEmailUpdateModal = (): void => {
+        setOpenEmailUpdateModal(true);
+    };
+    const handleCloseEmailUpdateModal = (): void => {
+        setOpenEmailUpdateModal(false);
+    };
+
     useEffect(() => {
         // Set values from Redux on page load
         setInitialFormikData({
@@ -50,13 +75,6 @@ const DetailsForm = (): JSX.Element => {
     }, [userDetails]);
 
     useEffect(() => {
-        // dispatch(
-        //     setUserDetails({
-        //         ...userDetails,
-        //         profilePictureId: newAvatar._id,
-        //     })
-        // );
-
         // Update the selected profile picture to the local user details
         setLocalUserDetails((prevData) => {
             return {
@@ -82,12 +100,6 @@ const DetailsForm = (): JSX.Element => {
                 'profilePictureId',
                 ''
             );
-
-            console.log({
-                ...values,
-                profilePictureId,
-            });
-
             mutate(
                 {
                     name: values.name,
@@ -123,106 +135,130 @@ const DetailsForm = (): JSX.Element => {
     return isLoading || localUserDetails == null ? (
         <PageLoader />
     ) : (
-        <Box
-            sx={{
-                width: '450px',
-            }}
-        >
-            <Paper
-                elevation={2}
+        <Fragment>
+            <Box
                 sx={{
-                    py: 5,
-                    px: 4,
+                    width: '450px',
                 }}
             >
-                <Box>
-                    <Avatar
-                        user={localUserDetails}
-                        newAvatar={newAvatar}
-                        setNewAvatar={setNewAvatar}
-                    />
-
-                    <Box
-                        noValidate
-                        component="form"
-                        autoComplete="off"
-                        onSubmit={formik.handleSubmit}
-                    >
-                        <TextField
-                            fullWidth
-                            id="name"
-                            label="Name"
-                            variant="outlined"
-                            margin="dense"
-                            value={formik.values.name}
-                            onChange={formik.handleChange}
-                            error={
-                                formik.touched.name === true &&
-                                Boolean(formik.errors.name)
-                            }
-                            helperText={
-                                formik.touched.name === true &&
-                                formik.errors.name
-                            }
+                <Paper
+                    elevation={2}
+                    sx={{
+                        py: 5,
+                        px: 4,
+                    }}
+                >
+                    <Box>
+                        <Avatar
+                            user={localUserDetails}
+                            newAvatar={newAvatar}
+                            setNewAvatar={setNewAvatar}
                         />
 
-                        <TextField
-                            fullWidth
-                            disabled
-                            id="email"
-                            label="Email"
-                            variant="outlined"
-                            margin="dense"
-                            value={formik.values.email}
-                            InputProps={{
-                                endAdornment: (
-                                    <Button
-                                        sx={{
-                                            ml: 2,
-                                        }}
-                                    >
-                                        Update
-                                    </Button>
-                                ),
-                            }}
-                        />
-
-                        <TextField
-                            fullWidth
-                            disabled
-                            id="contactNumber"
-                            label="Contact number"
-                            variant="outlined"
-                            margin="dense"
-                            value={formik.values.contactNumber}
-                            InputProps={{
-                                endAdornment: (
-                                    <Button
-                                        sx={{
-                                            ml: 2,
-                                        }}
-                                    >
-                                        Update
-                                    </Button>
-                                ),
-                            }}
-                        />
-
-                        <Button
-                            fullWidth
-                            color="primary"
-                            variant="contained"
-                            type="submit"
-                            sx={{
-                                mt: 3,
-                            }}
+                        <Box
+                            noValidate
+                            component="form"
+                            autoComplete="off"
+                            onSubmit={formik.handleSubmit}
                         >
-                            Save
-                        </Button>
+                            <TextField
+                                fullWidth
+                                id="name"
+                                label="Name"
+                                variant="outlined"
+                                margin="dense"
+                                value={formik.values.name}
+                                onChange={formik.handleChange}
+                                error={
+                                    formik.touched.name === true &&
+                                    Boolean(formik.errors.name)
+                                }
+                                helperText={
+                                    formik.touched.name === true &&
+                                    formik.errors.name
+                                }
+                            />
+
+                            <TextField
+                                fullWidth
+                                disabled
+                                id="email"
+                                label="Email"
+                                variant="outlined"
+                                margin="dense"
+                                value={formik.values.email}
+                                InputProps={{
+                                    endAdornment: (
+                                        <Button
+                                            sx={{
+                                                ml: 2,
+                                            }}
+                                            onClick={handleOpenEmailUpdateModal}
+                                        >
+                                            Update
+                                        </Button>
+                                    ),
+                                }}
+                            />
+
+                            <TextField
+                                fullWidth
+                                disabled
+                                id="contactNumber"
+                                label="Contact number"
+                                variant="outlined"
+                                margin="dense"
+                                value={formik.values.contactNumber}
+                                InputProps={{
+                                    endAdornment: (
+                                        <Button
+                                            sx={{
+                                                ml: 2,
+                                            }}
+                                            onClick={
+                                                handleOpenContactNumberUpdateModal
+                                            }
+                                        >
+                                            Update
+                                        </Button>
+                                    ),
+                                }}
+                            />
+
+                            <Button
+                                fullWidth
+                                color="primary"
+                                variant="contained"
+                                type="submit"
+                                sx={{
+                                    mt: 3,
+                                }}
+                            >
+                                Save
+                            </Button>
+                        </Box>
                     </Box>
-                </Box>
-            </Paper>
-        </Box>
+                </Paper>
+            </Box>
+
+            <Modal
+                handleCloseModal={handleCloseContactNumberUpdateModal}
+                open={openContactNumberUpdateModal}
+                setCleanModalContent={setCleanModalContent}
+            >
+                {cleanModalContent ? null : <ContactNumberUpdateModal />}
+            </Modal>
+
+            <Modal
+                handleCloseModal={handleCloseEmailUpdateModal}
+                open={openEmailUpdateModal}
+                setCleanModalContent={setCleanModalContent}
+            >
+                {cleanModalContent ? null : (
+                    <EmailUpdateModal localUserDetails={localUserDetails} />
+                )}
+            </Modal>
+        </Fragment>
     );
 };
 

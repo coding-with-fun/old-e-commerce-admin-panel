@@ -5,12 +5,7 @@ import MuiModal from '@mui/material/Modal';
 import { useEffect } from 'react';
 
 const Modal = (props: PropTypes): JSX.Element => {
-    const {
-        openImageUploadModal,
-        handleCloseImageUploadModal,
-        setCleanModalContent,
-        children,
-    } = props;
+    const { open, handleCloseModal, setCleanModalContent, children } = props;
 
     useEffect(() => {
         setCleanModalContent(false);
@@ -26,8 +21,8 @@ const Modal = (props: PropTypes): JSX.Element => {
         <MuiModal
             aria-labelledby="transition-modal-title"
             aria-describedby="transition-modal-description"
-            open={openImageUploadModal}
-            onClose={handleCloseImageUploadModal}
+            open={open}
+            onClose={handleCloseModal}
             closeAfterTransition
             slots={{
                 backdrop: Backdrop,
@@ -38,7 +33,7 @@ const Modal = (props: PropTypes): JSX.Element => {
                 },
             }}
         >
-            <Fade in={openImageUploadModal}>
+            <Fade in={open}>
                 <Box
                     sx={{
                         position: 'absolute',
@@ -64,8 +59,8 @@ const Modal = (props: PropTypes): JSX.Element => {
 export default Modal;
 
 interface PropTypes {
-    openImageUploadModal: boolean;
-    handleCloseImageUploadModal: () => void;
+    open: boolean;
+    handleCloseModal: () => void;
     setCleanModalContent: React.Dispatch<React.SetStateAction<boolean>>;
     children: JSX.Element[] | JSX.Element | null;
 }

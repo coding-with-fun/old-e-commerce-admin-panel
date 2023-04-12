@@ -3,16 +3,16 @@ import MuiAvatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import { Fragment, useState } from 'react';
+import Modal from '../../../components/HOC/Modal';
 import { type IUser } from '../../../redux/slice/user.slice';
 import './Avatar.css';
 import ImageUploadModal from './ImageUploadModal';
-import Modal from '../../../components/HOC/Modal';
 
 const Avatar = (props: PropTypes): JSX.Element => {
     const { user, newAvatar, setNewAvatar } = props;
-    const [openImageUploadModal, setOpenImageUploadModal] = useState(false);
     const [cleanModalContent, setCleanModalContent] = useState(false);
 
+    const [openImageUploadModal, setOpenImageUploadModal] = useState(false);
     const handleOpenImageUploadModal = (): void => {
         setOpenImageUploadModal(true);
     };
@@ -57,8 +57,8 @@ const Avatar = (props: PropTypes): JSX.Element => {
             </Box>
 
             <Modal
-                handleCloseImageUploadModal={handleCloseImageUploadModal}
-                openImageUploadModal={openImageUploadModal}
+                handleCloseModal={handleCloseImageUploadModal}
+                open={openImageUploadModal}
                 setCleanModalContent={setCleanModalContent}
             >
                 {cleanModalContent ? null : (
