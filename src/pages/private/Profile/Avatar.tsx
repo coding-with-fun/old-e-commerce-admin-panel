@@ -39,7 +39,7 @@ const Avatar = (props: PropTypes): JSX.Element => {
                         src={
                             newAvatar.url !== ''
                                 ? newAvatar.url
-                                : user.profilePictureId
+                                : user.profilePicture
                         }
                         sx={{
                             width: 120,

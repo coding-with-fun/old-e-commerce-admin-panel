@@ -7,6 +7,7 @@ const endpoints = {
     },
     profile: {
         details: '/admin/profile',
+        update: '/admin/profile/update',
     },
 };
 

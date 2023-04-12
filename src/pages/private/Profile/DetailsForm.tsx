@@ -8,14 +8,18 @@ import { useEffect, useState } from 'react';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import PageLoader from '../../../components/PageLoader';
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
+import { setUserDetails, type IUser } from '../../../redux/slice/user.slice';
 import Avatar from './Avatar';
 import schema from './formValidator';
-import { setUserDetails } from '../../../redux/slice/user.slice';
+import { useMutation } from '@tanstack/react-query';
+import { UpdateProfileAPI } from '../../../apis/profile';
+import toast from '../../../libs/toast';
 
 const DetailsForm = (): JSX.Element => {
     const userDetails = useAppSelector((state) => state.user.userDetails);
     const dispatch = useAppDispatch();
 
+    // Initial values for the form
     const initialValues: InitialFormikDataInterface = {
         name: '',
         email: '',
@@ -23,40 +27,102 @@ const DetailsForm = (): JSX.Element => {
     };
     const [initialFormikData, setInitialFormikData] =
         useState<InitialFormikDataInterface>(initialValues);
+
+    // Updated user details to be submitted
+    const [localUserDetails, setLocalUserDetails] = useState<IUser>();
+
+    // New profile picture selected
     const [newAvatar, setNewAvatar] = useState({
         _id: '',
         url: '',
     });
 
     useEffect(() => {
+        // Set values from Redux on page load
         setInitialFormikData({
             contactNumber: _.get(userDetails, 'contactNumber', ''),
             email: _.get(userDetails, 'email', ''),
             name: _.get(userDetails, 'name', ''),
         });
+        setLocalUserDetails({
+            ...userDetails,
+        });
     }, [userDetails]);
 
     useEffect(() => {
-        dispatch(
-            setUserDetails({
-                ...userDetails,
+        // dispatch(
+        //     setUserDetails({
+        //         ...userDetails,
+        //         profilePictureId: newAvatar._id,
+        //     })
+        // );
+
+        // Update the selected profile picture to the local user details
+        setLocalUserDetails((prevData) => {
+            return {
+                ...prevData,
                 profilePictureId: newAvatar._id,
-            })
-        );
+            };
+        });
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [newAvatar]);
+
+    const { mutate, isLoading } = useMutation({
+        mutationFn: UpdateProfileAPI,
+    });
 
     const formik = useFormik({
         initialValues: initialFormikData,
         enableReinitialize: true,
         validationSchema: toFormikValidationSchema(schema),
         onSubmit: async (values) => {
-            console.log(values);
+            const profilePictureId = _.get(
+                localUserDetails,
+                'profilePictureId',
+                ''
+            );
+
+            console.log({
+                ...values,
+                profilePictureId,
+            });
+
+            mutate(
+                {
+                    name: values.name,
+                    profilePictureId,
+                },
+                {
+                    onError: (error) => {
+                        toast(_.get(error, 'message', ''));
+                    },
+                    onSuccess(data, variables) {
+                        console.log({
+                            variables,
+                            data,
+                        });
+
+                        dispatch(
+                            setUserDetails({
+                                ...userDetails,
+                                profilePicture: _.get(
+                                    data,
+                                    'admin.profilePicture',
+                                    ''
+                                ),
+                                name: _.get(data, 'admin.name', ''),
+                            })
+                        );
+                    },
+                }
+            );
         },
     });
 
-    return userDetails != null ? (
+    return isLoading || localUserDetails == null ? (
+        <PageLoader />
+    ) : (
         <Box
             sx={{
                 width: '450px',
@@ -71,7 +137,7 @@ const DetailsForm = (): JSX.Element => {
             >
                 <Box>
                     <Avatar
-                        user={userDetails}
+                        user={localUserDetails}
                         newAvatar={newAvatar}
                         setNewAvatar={setNewAvatar}
                     />
@@ -157,8 +223,6 @@ const DetailsForm = (): JSX.Element => {
                 </Box>
             </Paper>
         </Box>
-    ) : (
-        <PageLoader />
     );
 };
 
