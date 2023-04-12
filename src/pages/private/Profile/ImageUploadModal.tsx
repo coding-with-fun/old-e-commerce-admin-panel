@@ -3,16 +3,14 @@ import Button from '@mui/material/Button';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 import _ from 'lodash';
-import { useCallback } from 'react';
+import { Fragment, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import bg from '../../../assets/imageUploadModalBg.svg';
-import Modal from '../../../components/HOC/Modal';
 import { useUploadForm } from '../../../hooks/uploadFile';
 import { baseURL } from '../../../libs/interceptor';
 
 const ImageUploadModal = (props: PropTypes): JSX.Element => {
-    const { openImageUploadModal, handleCloseImageUploadModal, setNewAvatar } =
-        props;
+    const { setNewAvatar, handleCloseImageUploadModal } = props;
     const { uploadForm, progress, fileUploadStarted } = useUploadForm(
         `${baseURL}/get-files-url`
     );
@@ -44,10 +42,7 @@ const ImageUploadModal = (props: PropTypes): JSX.Element => {
     };
 
     return (
-        <Modal
-            handleCloseImageUploadModal={handleCloseImageUploadModal}
-            openImageUploadModal={openImageUploadModal}
-        >
+        <Fragment>
             <Box>
                 <Typography
                     variant="h6"
@@ -170,14 +165,13 @@ const ImageUploadModal = (props: PropTypes): JSX.Element => {
                     )}
                 </Box>
             </Box>
-        </Modal>
+        </Fragment>
     );
 };
 
 export default ImageUploadModal;
 
 interface PropTypes {
-    openImageUploadModal: boolean;
     handleCloseImageUploadModal: () => void;
     setNewAvatar: React.Dispatch<
         React.SetStateAction<{

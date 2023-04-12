@@ -6,6 +6,7 @@ import { Fragment, useState } from 'react';
 import { type IUser } from '../../../redux/slice/user.slice';
 import './Avatar.css';
 import ImageUploadModal from './ImageUploadModal';
+import Modal from '../../../components/HOC/Modal';
 
 const Avatar = (props: PropTypes): JSX.Element => {
     const { user, newAvatar, setNewAvatar } = props;
@@ -54,11 +55,19 @@ const Avatar = (props: PropTypes): JSX.Element => {
                 </Box>
             </Box>
 
-            <ImageUploadModal
-                openImageUploadModal={openImageUploadModal}
+            <Modal
                 handleCloseImageUploadModal={handleCloseImageUploadModal}
-                setNewAvatar={setNewAvatar}
-            />
+                openImageUploadModal={openImageUploadModal}
+            >
+                {openImageUploadModal ? (
+                    <ImageUploadModal
+                        handleCloseImageUploadModal={
+                            handleCloseImageUploadModal
+                        }
+                        setNewAvatar={setNewAvatar}
+                    />
+                ) : null}
+            </Modal>
         </Fragment>
     );
 };

@@ -51,5 +51,5 @@ export default Modal;
 interface PropTypes {
     openImageUploadModal: boolean;
     handleCloseImageUploadModal: () => void;
-    children: JSX.Element[] | JSX.Element;
+    children: JSX.Element[] | JSX.Element | null;
 }
