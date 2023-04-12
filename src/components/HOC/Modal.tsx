@@ -2,10 +2,25 @@ import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Fade from '@mui/material/Fade';
 import MuiModal from '@mui/material/Modal';
+import { useEffect } from 'react';
 
 const Modal = (props: PropTypes): JSX.Element => {
-    const { openImageUploadModal, handleCloseImageUploadModal, children } =
-        props;
+    const {
+        openImageUploadModal,
+        handleCloseImageUploadModal,
+        setCleanModalContent,
+        children,
+    } = props;
+
+    useEffect(() => {
+        setCleanModalContent(false);
+
+        return () => {
+            setCleanModalContent(true);
+        };
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <MuiModal
@@ -51,5 +66,6 @@ export default Modal;
 interface PropTypes {
     openImageUploadModal: boolean;
     handleCloseImageUploadModal: () => void;
+    setCleanModalContent: React.Dispatch<React.SetStateAction<boolean>>;
     children: JSX.Element[] | JSX.Element | null;
 }

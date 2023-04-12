@@ -11,6 +11,7 @@ import Modal from '../../../components/HOC/Modal';
 const Avatar = (props: PropTypes): JSX.Element => {
     const { user, newAvatar, setNewAvatar } = props;
     const [openImageUploadModal, setOpenImageUploadModal] = useState(false);
+    const [cleanModalContent, setCleanModalContent] = useState(false);
 
     const handleOpenImageUploadModal = (): void => {
         setOpenImageUploadModal(true);
@@ -58,15 +59,16 @@ const Avatar = (props: PropTypes): JSX.Element => {
             <Modal
                 handleCloseImageUploadModal={handleCloseImageUploadModal}
                 openImageUploadModal={openImageUploadModal}
+                setCleanModalContent={setCleanModalContent}
             >
-                {openImageUploadModal ? (
+                {cleanModalContent ? null : (
                     <ImageUploadModal
                         handleCloseImageUploadModal={
                             handleCloseImageUploadModal
                         }
                         setNewAvatar={setNewAvatar}
                     />
-                ) : null}
+                )}
             </Modal>
         </Fragment>
     );
