@@ -52,18 +52,20 @@ const ImageUploadModal = (props: PropTypes): JSX.Element => {
                         mb: '1.25rem',
                     }}
                 >
-                    Upload your image
+                    {fileUploadStarted ? 'Uploading...' : 'Upload your image'}
                 </Typography>
 
-                <Typography
-                    variant="body2"
-                    component="h2"
-                    sx={{
-                        textAlign: 'center',
-                    }}
-                >
-                    File should be Jpeg or Png
-                </Typography>
+                {fileUploadStarted ? null : (
+                    <Typography
+                        variant="body2"
+                        component="h2"
+                        sx={{
+                            textAlign: 'center',
+                        }}
+                    >
+                        File should be Jpeg or Png
+                    </Typography>
+                )}
             </Box>
 
             <Box
@@ -75,54 +77,58 @@ const ImageUploadModal = (props: PropTypes): JSX.Element => {
                     justifyContent: 'center',
                 }}
             >
-                <Box
-                    {...getRootProps()}
-                    sx={{
-                        height: '16rem',
-                        width: '100%',
-                        cursor: 'pointer',
-                        bgcolor: '#F6F8FB',
-                        mt: '3rem',
-                        mb: '1rem',
-
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        flexDirection: 'column',
-
-                        borderRadius: '0.5rem',
-                        border: '2px dashed #97BEF4',
-                    }}
-                >
-                    <input {...getInputProps()} />
-
+                {fileUploadStarted ? null : (
                     <Box
+                        {...getRootProps()}
                         sx={{
+                            height: '16rem',
+                            width: '100%',
+                            cursor: 'pointer',
+                            bgcolor: '#F6F8FB',
+                            mt: '3rem',
+                            mb: '1rem',
+
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
                             flexDirection: 'column',
-                            gap: '1rem',
+
+                            borderRadius: '0.5rem',
+                            border: '2px dashed #97BEF4',
                         }}
                     >
-                        <img src={bg} alt="Upload Image" />
+                        <input {...getInputProps()} />
 
-                        <Typography variant="body2" component="p">
-                            Drag & Drop your image here
-                        </Typography>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                flexDirection: 'column',
+                                gap: '1rem',
+                            }}
+                        >
+                            <img src={bg} alt="Upload Image" />
+
+                            <Typography variant="body2" component="p">
+                                Drag & Drop your image here
+                            </Typography>
+                        </Box>
                     </Box>
-                </Box>
+                )}
 
-                <Typography
-                    variant="body2"
-                    component="h2"
-                    sx={{
-                        textAlign: 'center',
-                        color: '#BDBDBD',
-                    }}
-                >
-                    Or
-                </Typography>
+                {fileUploadStarted ? null : (
+                    <Typography
+                        variant="body2"
+                        component="h2"
+                        sx={{
+                            textAlign: 'center',
+                            color: '#BDBDBD',
+                        }}
+                    >
+                        Or
+                    </Typography>
+                )}
 
                 <Box
                     sx={{
