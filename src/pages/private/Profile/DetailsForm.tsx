@@ -17,6 +17,7 @@ import Avatar from './Avatar';
 import ContactNumberUpdateModal from './ContactNumberUpdateModal';
 import EmailUpdateModal from './EmailUpdateModal';
 import schema from './formValidator';
+import ContactNumberVerifyModal from './ContactNumberVerifyModal';
 
 const DetailsForm = (): JSX.Element => {
     const userDetails = useAppSelector((state) => state.user.userDetails);
@@ -46,6 +47,8 @@ const DetailsForm = (): JSX.Element => {
     // Flags for contact number update modal
     const [openContactNumberUpdateModal, setOpenContactNumberUpdateModal] =
         useState(false);
+    const [contactNumberUpdateModalType, setContactNumberUpdateModalType] =
+        useState<'update' | 'verify'>('update');
     const handleOpenContactNumberUpdateModal = (): void => {
         setOpenContactNumberUpdateModal(true);
     };
@@ -246,7 +249,16 @@ const DetailsForm = (): JSX.Element => {
                 open={openContactNumberUpdateModal}
                 setCleanModalContent={setCleanModalContent}
             >
-                {cleanModalContent ? null : <ContactNumberUpdateModal />}
+                {cleanModalContent ? null : contactNumberUpdateModalType ===
+                  'update' ? (
+                    <ContactNumberUpdateModal
+                        setContactNumberUpdateModalType={
+                            setContactNumberUpdateModalType
+                        }
+                    />
+                ) : (
+                    <ContactNumberVerifyModal />
+                )}
             </Modal>
 
             <Modal

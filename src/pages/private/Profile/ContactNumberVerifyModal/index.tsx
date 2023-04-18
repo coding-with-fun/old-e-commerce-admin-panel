@@ -7,17 +7,15 @@ import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { useEffect } from 'react';
 import schema from './formValidator';
 
-const ContactNumberUpdateModal = (props: IProps): JSX.Element => {
-    const { setContactNumberUpdateModalType } = props;
-
+const ContactNumberVerifyModal = (): JSX.Element => {
     const formik = useFormik({
         initialValues: {
             contact_number_modal: '',
+            otp_contact_number_modal: '',
         },
         validationSchema: toFormikValidationSchema(schema),
         onSubmit: async (values) => {
             console.log(values);
-            setContactNumberUpdateModalType('verify');
         },
     });
 
@@ -62,6 +60,24 @@ const ContactNumberUpdateModal = (props: IProps): JSX.Element => {
                     }
                 />
 
+                <TextField
+                    fullWidth
+                    id="otp_contact_number_modal"
+                    placeholder="Enter new contact number"
+                    variant="outlined"
+                    margin="dense"
+                    value={formik.values.otp_contact_number_modal}
+                    onChange={formik.handleChange}
+                    error={
+                        formik.touched.otp_contact_number_modal === true &&
+                        Boolean(formik.errors.otp_contact_number_modal)
+                    }
+                    helperText={
+                        formik.touched.otp_contact_number_modal === true &&
+                        formik.errors.otp_contact_number_modal
+                    }
+                />
+
                 <Button
                     fullWidth
                     color="primary"
@@ -78,10 +94,4 @@ const ContactNumberUpdateModal = (props: IProps): JSX.Element => {
     );
 };
 
-export default ContactNumberUpdateModal;
-
-interface IProps {
-    setContactNumberUpdateModalType: React.Dispatch<
-        React.SetStateAction<'update' | 'verify'>
-    >;
-}
+export default ContactNumberVerifyModal;
