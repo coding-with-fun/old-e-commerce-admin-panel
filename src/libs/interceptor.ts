@@ -58,6 +58,7 @@ axiosInstance.interceptors.response.use(
 
         if (error.response.status === 401) {
             removeUserToken();
+            window.location.replace('/signin');
         }
 
         return await Promise.reject(error.response.data);
