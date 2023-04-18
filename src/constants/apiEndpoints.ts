@@ -8,6 +8,9 @@ const endpoints = {
     profile: {
         details: '/admin/profile',
         update: '/admin/profile/update',
+        updateEmail: '/admin/profile/update/email',
+        updateContactNumber: '/admin/profile/update/contact-number',
+        verifyContactNumber: '/admin/profile/update/verify-contact-number',
     },
 };
 

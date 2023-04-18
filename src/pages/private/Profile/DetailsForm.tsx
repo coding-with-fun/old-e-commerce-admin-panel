@@ -255,7 +255,12 @@ const DetailsForm = (): JSX.Element => {
                 setCleanModalContent={setCleanModalContent}
             >
                 {cleanModalContent ? null : (
-                    <EmailUpdateModal localUserDetails={localUserDetails} />
+                    <EmailUpdateModal
+                        localUserDetails={localUserDetails}
+                        handleCloseEmailUpdateModal={
+                            handleCloseEmailUpdateModal
+                        }
+                    />
                 )}
             </Modal>
         </Fragment>

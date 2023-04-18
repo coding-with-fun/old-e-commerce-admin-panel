@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const schema = z.object({
-    email: z
+    email_modal: z
         .string({
             required_error: 'Email is required.',
         })
