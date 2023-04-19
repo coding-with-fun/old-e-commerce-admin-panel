@@ -45,6 +45,7 @@ const DetailsForm = (): JSX.Element => {
     const [cleanModalContent, setCleanModalContent] = useState(false);
 
     // Flags for contact number update modal
+    const [newContactNumber, setNewContactNumber] = useState('');
     const [openContactNumberUpdateModal, setOpenContactNumberUpdateModal] =
         useState(false);
     const [contactNumberUpdateModalType, setContactNumberUpdateModalType] =
@@ -54,6 +55,8 @@ const DetailsForm = (): JSX.Element => {
     };
     const handleCloseContactNumberUpdateModal = (): void => {
         setOpenContactNumberUpdateModal(false);
+        setContactNumberUpdateModalType('update');
+        setNewContactNumber('');
     };
 
     // Flags for email update modal
@@ -255,9 +258,19 @@ const DetailsForm = (): JSX.Element => {
                         setContactNumberUpdateModalType={
                             setContactNumberUpdateModalType
                         }
+                        newContactNumber={newContactNumber}
+                        setNewContactNumber={setNewContactNumber}
                     />
                 ) : (
-                    <ContactNumberVerifyModal />
+                    <ContactNumberVerifyModal
+                        setContactNumberUpdateModalType={
+                            setContactNumberUpdateModalType
+                        }
+                        newContactNumber={newContactNumber}
+                        handleCloseContactNumberUpdateModal={
+                            handleCloseContactNumberUpdateModal
+                        }
+                    />
                 )}
             </Modal>
 

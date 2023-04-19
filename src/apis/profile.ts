@@ -33,7 +33,7 @@ export const VerifyContactNumberAPI = async (body: {
     otp: string;
 }): Promise<AxiosResponse<any, any>> => {
     return await axiosInstance.post(
-        endpoints.profile.updateContactNumber,
+        endpoints.profile.verifyContactNumber,
         body
     );
 };

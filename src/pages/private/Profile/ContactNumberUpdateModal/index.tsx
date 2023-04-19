@@ -1,23 +1,49 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { useMutation } from '@tanstack/react-query';
 import { useFormik } from 'formik';
-import { toFormikValidationSchema } from 'zod-formik-adapter';
+import _ from 'lodash';
 import { useEffect } from 'react';
+import { toFormikValidationSchema } from 'zod-formik-adapter';
+import { UpdateContactNumberAPI } from '../../../../apis/profile';
+import PageLoader from '../../../../components/PageLoader';
+import toast from '../../../../libs/toast';
 import schema from './formValidator';
 
 const ContactNumberUpdateModal = (props: IProps): JSX.Element => {
-    const { setContactNumberUpdateModalType } = props;
+    const {
+        setContactNumberUpdateModalType,
+        newContactNumber,
+        setNewContactNumber,
+    } = props;
+
+    const { mutate, isLoading } = useMutation({
+        mutationFn: UpdateContactNumberAPI,
+    });
 
     const formik = useFormik({
         initialValues: {
-            contact_number_modal: '',
+            contact_number_modal: newContactNumber,
         },
         validationSchema: toFormikValidationSchema(schema),
         onSubmit: async (values) => {
-            console.log(values);
-            setContactNumberUpdateModalType('verify');
+            mutate(
+                {
+                    contactNumber: '+91' + values.contact_number_modal,
+                },
+                {
+                    onError: (error) => {
+                        toast(_.get(error, 'message', ''));
+                    },
+                    onSuccess() {
+                        setNewContactNumber(values.contact_number_modal);
+                        setContactNumberUpdateModalType('verify');
+                    },
+                }
+            );
         },
     });
 
@@ -32,7 +58,9 @@ const ContactNumberUpdateModal = (props: IProps): JSX.Element => {
         return () => {};
     }, []);
 
-    return (
+    return isLoading ? (
+        <PageLoader />
+    ) : (
         <Box>
             <Typography component="p" variant="body1">
                 Please enter the new contact number and we will send you an OTP.
@@ -50,6 +78,13 @@ const ContactNumberUpdateModal = (props: IProps): JSX.Element => {
                     placeholder="Enter new contact number"
                     variant="outlined"
                     margin="dense"
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                +91
+                            </InputAdornment>
+                        ),
+                    }}
                     value={formik.values.contact_number_modal}
                     onChange={formik.handleChange}
                     error={
@@ -84,4 +119,6 @@ interface IProps {
     setContactNumberUpdateModalType: React.Dispatch<
         React.SetStateAction<'update' | 'verify'>
     >;
+    newContactNumber: string;
+    setNewContactNumber: React.Dispatch<React.SetStateAction<string>>;
 }

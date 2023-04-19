@@ -84,6 +84,7 @@ const EmailUpdateModal = (props: IProps): JSX.Element | null => {
                 sx={{
                     mt: '3rem',
                     mb: '1rem',
+                    textAlign: 'center',
                 }}
             >
                 {emailUpdatedSuccessMessage}
