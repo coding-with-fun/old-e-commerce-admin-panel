@@ -24,6 +24,9 @@ const Dashboard = React.lazy(
 const Profile = React.lazy(
     async () => await import('../pages/private/Profile')
 );
+const AdminList = React.lazy(
+    async () => await import('../pages/private/Admin/AdminList')
+);
 
 // Common pages
 const VerifyEmail = React.lazy(
@@ -68,6 +71,10 @@ const router = createBrowserRouter([
             {
                 path: routes.private.profile,
                 element: <ProtectedRoute>{lazyLoad(Profile)}</ProtectedRoute>,
+            },
+            {
+                path: routes.private.admin.list,
+                element: <ProtectedRoute>{lazyLoad(AdminList)}</ProtectedRoute>,
             },
 
             // Wildcard
