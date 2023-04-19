@@ -12,6 +12,9 @@ const endpoints = {
         updateContactNumber: '/admin/profile/update/contact-number',
         verifyContactNumber: '/admin/profile/update/verify-contact-number',
     },
+    common: {
+        verifyEmail: '/verify-email',
+    },
 };
 
 export default endpoints;

@@ -9,7 +9,7 @@ import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { VerifyContactNumberAPI } from '../../../../apis/profile';
-import ContactNumberUpdatedModalImage from '../../../../assets/contactNumberUpdatedModalImage.png';
+import ContactNumberUpdatedModalImage from '../../../../assets/verified.png';
 import PageLoader from '../../../../components/PageLoader';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
 import toast from '../../../../libs/toast';

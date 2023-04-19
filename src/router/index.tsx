@@ -4,6 +4,7 @@ import Layout from '../components/Layout';
 import lazyLoad from '../libs/lazyLoad';
 import ProtectedRoute from './ProtectedRoute';
 import PublicRoute from './PublicRoute';
+import CommonLayout from '../components/CommonLayout';
 
 // Lazy loaded pages
 // Public pages
@@ -23,7 +24,24 @@ const Profile = React.lazy(
     async () => await import('../pages/private/Profile')
 );
 
+// Common pages
+const VerifyEmail = React.lazy(
+    async () => await import('../pages/common/VerifyEmail')
+);
+
 const router = createBrowserRouter([
+    // Common routes
+    {
+        element: <CommonLayout />,
+        children: [
+            {
+                path: '/verify-email',
+                element: (
+                    <ProtectedRoute>{lazyLoad(VerifyEmail)}</ProtectedRoute>
+                ),
+            },
+        ],
+    },
     {
         element: <Layout />,
         children: [

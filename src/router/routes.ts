@@ -7,6 +7,9 @@ const routes = {
     private: {
         dashboard: '/dashboard',
     },
+    common: {
+        verifyEmail: '/verify-email',
+    },
 };
 
 export default routes;

@@ -9,7 +9,7 @@ import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { UpdateEmailAPI } from '../../../../apis/profile';
-import EmailSentImage from '../../../../assets/emailSentImage.png';
+import EmailSentImage from '../../../../assets/emailSent.png';
 import PageLoader from '../../../../components/PageLoader';
 import toast from '../../../../libs/toast';
 import { type IUser } from '../../../../redux/slice/user.slice';
