@@ -19,6 +19,7 @@ import env from '../../env';
 import { useAppSelector } from '../../hooks/redux';
 import { getUserToken, removeUserToken } from '../../utils/manageUserToken';
 import MiniDrawer from './Sidebar';
+import routes from '../../router/routes';
 
 // const settings = ['Profile', 'Sign Out'];
 
@@ -91,7 +92,7 @@ const Navbar = (): JSX.Element => {
                             variant="h6"
                             noWrap
                             onClick={() => {
-                                navigate('/dashboard');
+                                navigate(routes.private.dashboard);
                             }}
                             sx={{
                                 mr: 2,

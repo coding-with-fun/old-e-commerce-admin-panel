@@ -1,5 +1,6 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { getUserToken } from '../utils/manageUserToken';
+import routes from './routes';
 
 const ProtectedRoute = ({
     children,
@@ -12,7 +13,7 @@ const ProtectedRoute = ({
     if ([null, ''].includes(token)) {
         return (
             <Navigate
-                to={`/signin?redirect=${location.pathname}`}
+                to={`${routes.public.signin}?redirect=${location.pathname}`}
                 replace={true}
             />
         );

@@ -5,6 +5,7 @@ import lazyLoad from '../libs/lazyLoad';
 import ProtectedRoute from './ProtectedRoute';
 import PublicRoute from './PublicRoute';
 import CommonLayout from '../components/CommonLayout';
+import routes from './routes';
 
 // Lazy loaded pages
 // Public pages
@@ -35,7 +36,7 @@ const router = createBrowserRouter([
         element: <CommonLayout />,
         children: [
             {
-                path: '/verify-email',
+                path: routes.common.verifyEmail,
                 element: (
                     <ProtectedRoute>{lazyLoad(VerifyEmail)}</ProtectedRoute>
                 ),
@@ -47,32 +48,34 @@ const router = createBrowserRouter([
         children: [
             // Public routes
             {
-                path: '/signin',
+                path: routes.public.signin,
                 element: <PublicRoute>{lazyLoad(SignIn)}</PublicRoute>,
             },
             {
-                path: '/forgot-password',
+                path: routes.public.forgotPassword,
                 element: <PublicRoute>{lazyLoad(ForgotPassword)}</PublicRoute>,
             },
             {
-                path: '/reset-password',
+                path: routes.public.resetPassword,
                 element: <PublicRoute>{lazyLoad(ResetPassword)}</PublicRoute>,
             },
 
             // Private routes
             {
-                path: '/dashboard',
+                path: routes.private.dashboard,
                 element: <ProtectedRoute>{lazyLoad(Dashboard)}</ProtectedRoute>,
             },
             {
-                path: '/profile',
+                path: routes.private.profile,
                 element: <ProtectedRoute>{lazyLoad(Profile)}</ProtectedRoute>,
             },
 
             // Wildcard
             {
                 path: '*',
-                element: <Navigate to="/dashboard" replace={true} />,
+                element: (
+                    <Navigate to={routes.private.dashboard} replace={true} />
+                ),
             },
         ],
     },

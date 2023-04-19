@@ -10,6 +10,7 @@ import PageLoader from '../../../components/PageLoader';
 import toast from '../../../libs/toast';
 import { useAppDispatch } from '../../../hooks/redux';
 import { setUserDetails } from '../../../redux/slice/user.slice';
+import routes from '../../../router/routes';
 
 const OtpScreen = (props: PropTypes): JSX.Element => {
     const dispatch = useAppDispatch();
@@ -39,7 +40,7 @@ const OtpScreen = (props: PropTypes): JSX.Element => {
                 onSuccess: (data) => {
                     toast(_.get(data, 'message', ''), 'success');
                     dispatch(setUserDetails(_.get(data, 'admin', {})));
-                    navigate('/dashboard', {
+                    navigate(routes.private.dashboard, {
                         replace: true,
                     });
                 },

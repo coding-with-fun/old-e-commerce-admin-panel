@@ -1,7 +1,5 @@
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import MailIcon from '@mui/icons-material/Mail';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import Divider from '@mui/material/Divider';
 import MuiDrawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
@@ -16,6 +14,8 @@ import {
     type CSSObject,
     type Theme,
 } from '@mui/material/styles';
+import SidebarLinks from './links';
+import { useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -70,6 +70,7 @@ export default function MiniDrawer(props: PropTypes): JSX.Element {
     const { handleDrawerClose, openSideBar } = props;
 
     const theme = useTheme();
+    const navigate = useNavigate();
 
     return (
         <Drawer variant="permanent" open={openSideBar}>
@@ -84,51 +85,16 @@ export default function MiniDrawer(props: PropTypes): JSX.Element {
             </DrawerHeader>
             <Divider />
             <List>
-                {['Inbox', 'Starred', 'Send email', 'Drafts'].map(
-                    (text, index) => (
-                        <ListItem
-                            key={text}
-                            disablePadding
-                            sx={{ display: 'block' }}
-                        >
-                            <ListItemButton
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: openSideBar
-                                        ? 'initial'
-                                        : 'center',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0,
-                                        mr: openSideBar ? 3 : 'auto',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    {index % 2 === 0 ? (
-                                        <InboxIcon />
-                                    ) : (
-                                        <MailIcon />
-                                    )}
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary={text}
-                                    sx={{ opacity: openSideBar ? 1 : 0 }}
-                                />
-                            </ListItemButton>
-                        </ListItem>
-                    )
-                )}
-            </List>
-            <Divider />
-            <List>
-                {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                {SidebarLinks.map((link) => (
                     <ListItem
-                        key={text}
+                        key={link.id}
                         disablePadding
-                        sx={{ display: 'block' }}
+                        sx={{
+                            display: 'block',
+                        }}
+                        onClick={() => {
+                            navigate(link.path);
+                        }}
                     >
                         <ListItemButton
                             sx={{
@@ -146,10 +112,10 @@ export default function MiniDrawer(props: PropTypes): JSX.Element {
                                     justifyContent: 'center',
                                 }}
                             >
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                                <link.icon />
                             </ListItemIcon>
                             <ListItemText
-                                primary={text}
+                                primary={link.label}
                                 sx={{ opacity: openSideBar ? 1 : 0 }}
                             />
                         </ListItemButton>
