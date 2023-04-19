@@ -2,19 +2,20 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { useMutation } from '@tanstack/react-query';
 import _ from 'lodash';
-import { Fragment, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Fragment, useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { VerifySignInOtpAPI } from '../../../apis/auth';
 import OtpInput from '../../../components/OtpInput';
 import PageLoader from '../../../components/PageLoader';
-import toast from '../../../libs/toast';
 import { useAppDispatch } from '../../../hooks/redux';
+import toast from '../../../libs/toast';
 import { setUserDetails } from '../../../redux/slice/user.slice';
 import routes from '../../../router/routes';
 
 const OtpScreen = (props: PropTypes): JSX.Element => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const [params] = useSearchParams();
 
     const otpLength = 4;
     const initialOtp: string[] = [];
@@ -22,6 +23,10 @@ const OtpScreen = (props: PropTypes): JSX.Element => {
         initialOtp.push('');
     }
     const [otp, setOtp] = useState(initialOtp);
+
+    const [redirectionUrl, setRedirectionUrl] = useState(
+        routes.private.dashboard
+    );
 
     const { mutate, isLoading } = useMutation({
         mutationFn: VerifySignInOtpAPI,
@@ -40,7 +45,7 @@ const OtpScreen = (props: PropTypes): JSX.Element => {
                 onSuccess: (data) => {
                     toast(_.get(data, 'message', ''), 'success');
                     dispatch(setUserDetails(_.get(data, 'admin', {})));
-                    navigate(routes.private.dashboard, {
+                    navigate(redirectionUrl, {
                         replace: true,
                     });
                 },
@@ -54,6 +59,15 @@ const OtpScreen = (props: PropTypes): JSX.Element => {
             }
         );
     };
+
+    useEffect(() => {
+        const redirectionUrl = params.get('redirect');
+        if (redirectionUrl !== null && redirectionUrl !== '') {
+            setRedirectionUrl(redirectionUrl);
+        }
+
+        return () => {};
+    }, [params]);
 
     return isLoading ? (
         <PageLoader />
