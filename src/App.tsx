@@ -10,7 +10,13 @@ import { getUserToken } from './utils/manageUserToken';
 
 const App = (): JSX.Element => {
     const dispatch = useAppDispatch();
-    const queryClient = new QueryClient();
+    const queryClient = new QueryClient({
+        defaultOptions: {
+            queries: {
+                refetchOnWindowFocus: false,
+            },
+        },
+    });
 
     const handleGetProfile = async (): Promise<void> => {
         const data = await GetProfileAPI();

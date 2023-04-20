@@ -23,14 +23,15 @@ import routes from '../../router/routes';
 
 // const settings = ['Profile', 'Sign Out'];
 
-const Navbar = (): JSX.Element => {
+const Navbar = (props: IProps): JSX.Element => {
     const location = useLocation();
     const navigate = useNavigate();
+    const { openSideBar, setOpenSideBar } = props;
 
     const userDetails = useAppSelector((state) => state.user.userDetails);
 
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-    const [openSideBar, setOpenSideBar] = useState(false);
+    // const [openSideBar, setOpenSideBar] = useState(false);
     const [userToken, setUserToken] = useState(getUserToken());
 
     const handleOpenUserMenu = (event: MouseEvent<HTMLElement>): void => {
@@ -61,6 +62,8 @@ const Navbar = (): JSX.Element => {
         if (userToken === null || userToken === '') {
             handleDrawerClose();
         }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location, userToken]);
 
     return (
@@ -241,3 +244,8 @@ const AppBar = styled(MuiAppBar, {
         }),
     }),
 }));
+
+interface IProps {
+    setOpenSideBar: React.Dispatch<React.SetStateAction<boolean>>;
+    openSideBar: boolean;
+}
