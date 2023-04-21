@@ -1,0 +1,26 @@
+.avatar_container {
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.avatar {
+    opacity: 1;
+    transition: 0.5s ease;
+    backface-visibility: hidden;
+}
+
+.uploader_container {
+    position: absolute;
+    left: 33%;
+    bottom: 33%;
+    transition: 0.5s ease;
+    opacity: 0;
+}
+
+.avatar_container:hover .avatar {
+    opacity: 0.6;
+}
+
+.avatar_container:hover .uploader_container {
+    opacity: 1;
+}

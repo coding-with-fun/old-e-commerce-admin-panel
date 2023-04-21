@@ -114,11 +114,7 @@ const Navbar = (props: IProps): JSX.Element => {
                             {env.app.app_name}
                         </Typography>
 
-                        <Typography
-                            variant="h5"
-                            noWrap
-                            component="a"
-                            href=""
+                        <Box
                             sx={{
                                 mr: 2,
                                 display: {
@@ -133,8 +129,21 @@ const Navbar = (props: IProps): JSX.Element => {
                                 textDecoration: 'none',
                             }}
                         >
-                            {env.app.app_name}
-                        </Typography>
+                            <Typography
+                                variant="h5"
+                                noWrap
+                                component="p"
+                                onClick={() => {
+                                    navigate(routes.private.dashboard);
+                                }}
+                                sx={{
+                                    cursor: 'pointer',
+                                    fontFamily: 'monospace',
+                                }}
+                            >
+                                {env.app.app_name}
+                            </Typography>
+                        </Box>
 
                         <Box
                             sx={{
