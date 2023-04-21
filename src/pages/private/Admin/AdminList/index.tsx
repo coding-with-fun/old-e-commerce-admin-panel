@@ -7,8 +7,15 @@ import { FetchAdminListAPI } from '../../../../apis/admin';
 import NoRowsOverlay from './NoRowsOverlay';
 import SearchFilter from './SearchFilter';
 import columns from './columns';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
+import { refetchAdminList } from '../../../../redux/slice/global.slice';
 
 const AdminList = (): JSX.Element => {
+    const fetchAdminList = useAppSelector(
+        (state) => state.global.fetchAdminList
+    );
+    const dispatch = useAppDispatch();
+
     const [query, setQuery] = useState('');
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(10);
@@ -40,7 +47,9 @@ const AdminList = (): JSX.Element => {
     // Search query debounce
     useEffect(() => {
         const getData = setTimeout(() => {
-            void refetch();
+            if (query !== '') {
+                void refetch();
+            }
         }, 1000);
 
         return () => {
@@ -49,6 +58,22 @@ const AdminList = (): JSX.Element => {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [query]);
+
+    // When admin is deleted refetch the list
+    useEffect(() => {
+        if (fetchAdminList) {
+            console.log(fetchAdminList);
+            refetch()
+                .then(() => {
+                    dispatch(refetchAdminList(false));
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [fetchAdminList]);
 
     return isError ? (
         <div>Something went wrong.</div>

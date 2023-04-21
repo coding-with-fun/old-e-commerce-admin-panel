@@ -9,6 +9,8 @@ export const FetchAdminListAPI = async (
     sort: string | null | undefined,
     query: string
 ): Promise<AxiosResponse<any, any>> => {
+    console.log('API CALLED');
+
     return await axiosInstance.get(
         endpoints.admin.list +
             `?page=${page}&perPage=${pageSize}&sortType=${
