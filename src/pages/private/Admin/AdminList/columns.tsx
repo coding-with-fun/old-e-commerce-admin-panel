@@ -1,6 +1,6 @@
 import { type GridColDef } from '@mui/x-data-grid';
 import ActivationSwitch from './ActivationSwitch';
-import SeeDetails from './SeeDetails';
+import ActionButtons from './ActionButtons';
 
 const columns: GridColDef[] = [
     {
@@ -33,7 +33,7 @@ const columns: GridColDef[] = [
         field: 'actions',
         headerName: 'Actions',
         sortable: false,
-        renderCell: SeeDetails,
+        renderCell: ActionButtons,
     },
 ];
 

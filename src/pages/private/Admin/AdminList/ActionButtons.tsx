@@ -2,7 +2,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Box from '@mui/material/Box';
 
-const SeeDetails = (): JSX.Element => {
+const ActionButtons = (): JSX.Element => {
     return (
         <Box
             sx={{
@@ -26,4 +26,4 @@ const SeeDetails = (): JSX.Element => {
     );
 };
 
-export default SeeDetails;
+export default ActionButtons;
