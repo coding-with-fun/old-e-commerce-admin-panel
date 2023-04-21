@@ -24,6 +24,11 @@ const columns: GridColDef[] = [
         width: 150,
     },
     {
+        field: 'createdAt',
+        headerName: 'Created At',
+        width: 150,
+    },
+    {
         field: 'isActive',
         headerName: 'Is active',
         sortable: false,
