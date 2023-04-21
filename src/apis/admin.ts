@@ -6,12 +6,13 @@ export const FetchAdminListAPI = async (
     page: number,
     pageSize: number,
     field: string,
-    sort: string | null | undefined
+    sort: string | null | undefined,
+    query: string
 ): Promise<AxiosResponse<any, any>> => {
     return await axiosInstance.get(
         endpoints.admin.list +
             `?page=${page}&perPage=${pageSize}&sortType=${
                 sort ?? 'desc'
-            }&sortBy=${field}`
+            }&sortBy=${field}&query=${query}`
     );
 };

@@ -9,7 +9,7 @@ import {
 } from '@mui/x-data-grid';
 import { useQuery } from '@tanstack/react-query';
 import _ from 'lodash';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FetchAdminListAPI } from '../../../../apis/admin';
 
 const columns: GridColDef[] = [
@@ -36,6 +36,7 @@ const columns: GridColDef[] = [
 ];
 
 const AdminList = (): JSX.Element => {
+    const [query, setQuery] = useState('');
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(10);
     const [sortModel, setSortModel] = useState<GridSortModel>([
@@ -45,18 +46,34 @@ const AdminList = (): JSX.Element => {
         },
     ]);
 
-    const { isLoading, data, isError } = useQuery({
+    const { isLoading, isFetching, data, isError, refetch } = useQuery({
         queryFn: async () =>
             await FetchAdminListAPI(
                 page + 1,
                 pageSize,
                 sortModel[0]?.field ?? 'createdAt',
-                sortModel[0]?.sort ?? 'desc'
+                sortModel[0]?.sort ?? 'desc',
+                query
             ),
-        queryKey: [page, pageSize, sortModel],
+        queryKey: ['FetchAdminList', page, pageSize, sortModel],
+        keepPreviousData: false,
     });
 
+    useEffect(() => {
+        const getData = setTimeout(() => {
+            void refetch();
+        }, 2000);
+
+        return () => {
+            clearTimeout(getData);
+        };
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [query]);
+
     const rows: GridRowsProp = _.get(data, 'admins', []);
+
+    console.log(isError);
 
     return isError ? (
         <div>Something went wrong.</div>
@@ -96,7 +113,13 @@ const AdminList = (): JSX.Element => {
                             }}
                         />
                     </Box>
-                    <InputBase placeholder="Search" />
+                    <InputBase
+                        placeholder="Search"
+                        value={query}
+                        onChange={(event) => {
+                            setQuery(event.target.value);
+                        }}
+                    />
                 </Box>
             </Box>
 
@@ -110,7 +133,7 @@ const AdminList = (): JSX.Element => {
                 getRowId={(row) => row._id}
                 rows={rows}
                 columns={columns}
-                loading={isLoading}
+                loading={isLoading || isFetching}
                 rowCount={_.get(data, 'pagination.total', 0)}
                 initialState={{
                     pagination: {
