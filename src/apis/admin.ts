@@ -9,8 +9,6 @@ export const FetchAdminListAPI = async (
     sort: string | null | undefined,
     query: string
 ): Promise<AxiosResponse<any, any>> => {
-    console.log('API CALLED');
-
     return await axiosInstance.get(
         endpoints.admin.list +
             `?page=${page}&perPage=${pageSize}&sortType=${
@@ -23,6 +21,16 @@ export const ToggleAdminActivationAPI = async (body: {
     adminId: string;
 }): Promise<AxiosResponse<any, any>> => {
     return await axiosInstance.post(endpoints.admin.toggleActivation, body);
+};
+
+export const CreateAdminAPI = async (body: {
+    name: string;
+    contactNumber: string;
+    email: string;
+    password: string;
+    profilePictureId: string | null | undefined;
+}): Promise<AxiosResponse<any, any>> => {
+    return await axiosInstance.post(endpoints.admin.create, body);
 };
 
 export const DeleteAdminAPI = async (body: {

@@ -3,17 +3,32 @@ import Button from '@mui/material/Button';
 import InputAdornment from '@mui/material/InputAdornment';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
+import { useMutation } from '@tanstack/react-query';
 import { useFormik } from 'formik';
+import _ from 'lodash';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
+import { CreateAdminAPI } from '../../../../apis/admin';
+import { useAppDispatch } from '../../../../hooks/redux';
+import toast from '../../../../libs/toast';
+import { refetchAdminList } from '../../../../redux/slice/global.slice';
+import routes from '../../../../router/routes';
 import Avatar from './Avatar';
 import schema from './formValidator';
-import { useState } from 'react';
 
 const DetailsForm = (): JSX.Element => {
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+
     // New profile picture selected
     const [newAvatar, setNewAvatar] = useState({
         _id: '',
         url: '',
+    });
+
+    const { mutate, isLoading } = useMutation({
+        mutationFn: CreateAdminAPI,
     });
 
     // Initial values for the form
@@ -32,6 +47,22 @@ const DetailsForm = (): JSX.Element => {
                 ...values,
                 newAvatar,
             });
+            mutate(
+                {
+                    ...values,
+                    profilePictureId: newAvatar._id,
+                },
+                {
+                    onError: (error) => {
+                        toast(_.get(error, 'message', ''));
+                    },
+                    onSuccess: (data) => {
+                        toast(_.get(data, 'message', ''), 'success');
+                        dispatch(refetchAdminList(true));
+                        navigate(routes.private.admin.list);
+                    },
+                }
+            );
         },
     });
 
@@ -142,6 +173,7 @@ const DetailsForm = (): JSX.Element => {
                             color="primary"
                             variant="contained"
                             type="submit"
+                            disabled={isLoading}
                             sx={{
                                 mt: 3,
                             }}
@@ -153,6 +185,7 @@ const DetailsForm = (): JSX.Element => {
                             fullWidth
                             color="primary"
                             variant="outlined"
+                            disabled={isLoading}
                             onClick={() => {
                                 formik.resetForm();
                                 setNewAvatar({

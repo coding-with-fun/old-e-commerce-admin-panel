@@ -14,6 +14,7 @@ const endpoints = {
     },
     admin: {
         list: '/admin/list',
+        create: '/admin/create',
         toggleActivation: '/admin/toggle-activation',
         delete: '/admin/delete',
     },

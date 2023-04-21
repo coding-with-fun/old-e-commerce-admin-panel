@@ -79,7 +79,11 @@ const AdminList = (): JSX.Element => {
                 width: '100%',
             }}
         >
-            <Box>
+            <Box
+                sx={{
+                    maxWidth: '100%',
+                }}
+            >
                 <SearchFilter query={query ?? ''} setQuery={setQuery} />
 
                 <DataGrid
