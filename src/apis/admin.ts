@@ -13,6 +13,6 @@ export const FetchAdminListAPI = async (
         endpoints.admin.list +
             `?page=${page}&perPage=${pageSize}&sortType=${
                 sort ?? 'desc'
-            }&sortBy=${field}&query=${query}`
+            }&sortBy=${field}&query=${encodeURIComponent(query)}`
     );
 };

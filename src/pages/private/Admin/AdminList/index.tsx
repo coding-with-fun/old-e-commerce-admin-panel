@@ -1,16 +1,16 @@
-import SearchIcon from '@mui/icons-material/Search';
 import Box from '@mui/material/Box';
-import InputBase from '@mui/material/InputBase';
+import Switch from '@mui/material/Switch';
 import {
     DataGrid,
     type GridColDef,
-    type GridRowsProp,
     type GridSortModel,
 } from '@mui/x-data-grid';
 import { useQuery } from '@tanstack/react-query';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { FetchAdminListAPI } from '../../../../apis/admin';
+import NoRowsOverlay from './NoRowsOverlay';
+import SearchFilter from './SearchFilter';
 
 const columns: GridColDef[] = [
     {
@@ -33,6 +33,19 @@ const columns: GridColDef[] = [
         headerName: 'Name',
         width: 150,
     },
+    {
+        field: 'isActive',
+        headerName: 'Is active',
+        sortable: false,
+        renderCell(params) {
+            return (
+                <Switch
+                    checked={params.row.isActive}
+                    disabled={params.row.isSuperAdmin}
+                />
+            );
+        },
+    },
 ];
 
 const AdminList = (): JSX.Element => {
@@ -46,6 +59,8 @@ const AdminList = (): JSX.Element => {
         },
     ]);
 
+    const [adminsList, setAdminsList] = useState<AdminListType[]>([]);
+
     const { isLoading, isFetching, data, isError, refetch } = useQuery({
         queryFn: async () =>
             await FetchAdminListAPI(
@@ -57,12 +72,16 @@ const AdminList = (): JSX.Element => {
             ),
         queryKey: ['FetchAdminList', page, pageSize, sortModel],
         keepPreviousData: false,
+        onSuccess(data) {
+            setAdminsList(_.get(data, 'admins', []));
+        },
     });
 
+    // Search query debounce
     useEffect(() => {
         const getData = setTimeout(() => {
             void refetch();
-        }, 2000);
+        }, 1000);
 
         return () => {
             clearTimeout(getData);
@@ -70,10 +89,6 @@ const AdminList = (): JSX.Element => {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [query]);
-
-    const rows: GridRowsProp = _.get(data, 'admins', []);
-
-    console.log(isError);
 
     return isError ? (
         <div>Something went wrong.</div>
@@ -83,45 +98,7 @@ const AdminList = (): JSX.Element => {
                 width: '100%',
             }}
         >
-            <Box
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    marginBottom: '1rem',
-                }}
-            >
-                <Box
-                    sx={{
-                        backgroundColor: 'rgba(0, 0, 0, 0.06)',
-                        borderRadius: '4px',
-                        padding: '8px 16px 8px 0',
-                        display: 'flex',
-                    }}
-                >
-                    <Box
-                        sx={{
-                            padding: '0px 16px',
-                            pointerEvents: 'none',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <SearchIcon
-                            sx={{
-                                color: 'rgba(0, 0, 0, 0.54)',
-                            }}
-                        />
-                    </Box>
-                    <InputBase
-                        placeholder="Search"
-                        value={query}
-                        onChange={(event) => {
-                            setQuery(event.target.value);
-                        }}
-                    />
-                </Box>
-            </Box>
+            <SearchFilter query={query} setQuery={setQuery} />
 
             <DataGrid
                 autoHeight
@@ -131,7 +108,7 @@ const AdminList = (): JSX.Element => {
                 disableDensitySelector
                 disableRowSelectionOnClick
                 getRowId={(row) => row._id}
-                rows={rows}
+                rows={adminsList}
                 columns={columns}
                 loading={isLoading || isFetching}
                 rowCount={_.get(data, 'pagination.total', 0)}
@@ -152,9 +129,24 @@ const AdminList = (): JSX.Element => {
                 onSortModelChange={(newSortModel) => {
                     setSortModel(newSortModel);
                 }}
+                slots={{
+                    noResultsOverlay: NoRowsOverlay,
+                    noRowsOverlay: NoRowsOverlay,
+                }}
             />
         </Box>
     );
 };
 
 export default AdminList;
+
+export interface AdminListType {
+    _id: any;
+    name: string;
+    email: string;
+    newEmail: string | undefined;
+    contactNumber: string;
+    isActive: boolean;
+    profilePicture: string;
+    isSuperAdmin: boolean;
+}
