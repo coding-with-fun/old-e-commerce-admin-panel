@@ -23,7 +23,7 @@ const VerifyEmail = (): JSX.Element => {
                 token,
             },
             {
-                onError() {
+                onError: () => {
                     setEmailToken(null);
                 },
             }

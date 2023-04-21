@@ -39,7 +39,7 @@ const EmailUpdateModal = (props: IProps): JSX.Element | null => {
                     onError: (error) => {
                         toast(_.get(error, 'message', ''));
                     },
-                    onSuccess(data) {
+                    onSuccess: (data) => {
                         setEmailUpdatedSuccessMessage(
                             _.get(data, 'message', '')
                         );

@@ -53,7 +53,7 @@ const ContactNumberVerifyModal = (props: IProps): JSX.Element => {
                         toast(_.get(error, 'message', ''));
                         setContactNumberUpdateModalType('update');
                     },
-                    onSuccess(data) {
+                    onSuccess: (data) => {
                         dispatch(
                             setUserDetails({
                                 ...userDetails,

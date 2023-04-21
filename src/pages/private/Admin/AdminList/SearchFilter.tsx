@@ -119,5 +119,5 @@ export default SearchFilter;
 
 interface IProps {
     query: string;
-    setQuery: React.Dispatch<React.SetStateAction<string>>;
+    setQuery: React.Dispatch<React.SetStateAction<string | undefined>>;
 }

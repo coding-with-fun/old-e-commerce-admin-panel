@@ -38,7 +38,7 @@ const ContactNumberUpdateModal = (props: IProps): JSX.Element => {
                     onError: (error) => {
                         toast(_.get(error, 'message', ''));
                     },
-                    onSuccess() {
+                    onSuccess: () => {
                         setNewContactNumber(values.contact_number_modal);
                         setContactNumberUpdateModalType('verify');
                     },

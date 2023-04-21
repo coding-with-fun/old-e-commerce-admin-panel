@@ -16,7 +16,7 @@ const AdminList = (): JSX.Element => {
     );
     const dispatch = useAppDispatch();
 
-    const [query, setQuery] = useState('');
+    const [query, setQuery] = useState<string | undefined>();
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(10);
     const [sortModel, setSortModel] = useState<GridSortModel>([
@@ -35,7 +35,7 @@ const AdminList = (): JSX.Element => {
                 pageSize,
                 sortModel[0]?.field ?? 'createdAt',
                 sortModel[0]?.sort ?? 'desc',
-                query
+                query ?? ''
             ),
         queryKey: ['FetchAdminList', page, pageSize, sortModel],
         keepPreviousData: false,
@@ -47,7 +47,7 @@ const AdminList = (): JSX.Element => {
     // Search query debounce
     useEffect(() => {
         const getData = setTimeout(() => {
-            if (query !== '') {
+            if (query !== undefined) {
                 void refetch();
             }
         }, 1000);
@@ -61,7 +61,7 @@ const AdminList = (): JSX.Element => {
 
     // When admin is deleted refetch the list
     useEffect(() => {
-        if (fetchAdminList === true) {
+        if (fetchAdminList) {
             void refetch();
             dispatch(refetchAdminList(false));
         }
@@ -74,45 +74,55 @@ const AdminList = (): JSX.Element => {
     ) : (
         <Box
             sx={{
+                display: 'flex',
+                justifyContent: 'center',
                 width: '100%',
             }}
         >
-            <SearchFilter query={query} setQuery={setQuery} />
+            <Box
+                sx={
+                    {
+                        // width: '100%',
+                    }
+                }
+            >
+                <SearchFilter query={query ?? ''} setQuery={setQuery} />
 
-            <DataGrid
-                autoHeight
-                disableColumnFilter
-                disableColumnMenu
-                disableColumnSelector
-                disableDensitySelector
-                disableRowSelectionOnClick
-                getRowId={(row) => row._id}
-                rows={adminsList}
-                columns={columns}
-                loading={isLoading || isFetching}
-                rowCount={_.get(data, 'pagination.total', 0)}
-                initialState={{
-                    pagination: {
-                        paginationModel: {
-                            pageSize,
-                            page,
+                <DataGrid
+                    autoHeight
+                    disableColumnFilter
+                    disableColumnMenu
+                    disableColumnSelector
+                    disableDensitySelector
+                    disableRowSelectionOnClick
+                    getRowId={(row) => row._id}
+                    rows={adminsList}
+                    columns={columns}
+                    loading={isLoading || isFetching}
+                    rowCount={_.get(data, 'pagination.total', 0)}
+                    initialState={{
+                        pagination: {
+                            paginationModel: {
+                                pageSize,
+                                page,
+                            },
                         },
-                    },
-                }}
-                onPaginationModelChange={(model) => {
-                    setPage(model.page);
-                    setPageSize(model.pageSize);
-                }}
-                pageSizeOptions={[1, 5, 10, 25]}
-                sortModel={sortModel}
-                onSortModelChange={(newSortModel) => {
-                    setSortModel(newSortModel);
-                }}
-                slots={{
-                    noResultsOverlay: NoRowsOverlay,
-                    noRowsOverlay: NoRowsOverlay,
-                }}
-            />
+                    }}
+                    onPaginationModelChange={(model) => {
+                        setPage(model.page);
+                        setPageSize(model.pageSize);
+                    }}
+                    pageSizeOptions={[1, 5, 10, 25]}
+                    sortModel={sortModel}
+                    onSortModelChange={(newSortModel) => {
+                        setSortModel(newSortModel);
+                    }}
+                    slots={{
+                        noResultsOverlay: NoRowsOverlay,
+                        noRowsOverlay: NoRowsOverlay,
+                    }}
+                />
+            </Box>
         </Box>
     );
 };

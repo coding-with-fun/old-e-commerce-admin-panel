@@ -115,7 +115,7 @@ const DetailsForm = (): JSX.Element => {
                     onError: (error) => {
                         toast(_.get(error, 'message', ''));
                     },
-                    onSuccess(data, variables) {
+                    onSuccess: (data, variables) => {
                         console.log({
                             variables,
                             data,

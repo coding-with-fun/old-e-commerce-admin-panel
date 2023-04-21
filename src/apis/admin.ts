@@ -24,3 +24,9 @@ export const ToggleAdminActivationAPI = async (body: {
 }): Promise<AxiosResponse<any, any>> => {
     return await axiosInstance.post(endpoints.admin.toggleActivation, body);
 };
+
+export const DeleteAdminAPI = async (body: {
+    adminId: string;
+}): Promise<AxiosResponse<any, any>> => {
+    return await axiosInstance.post(endpoints.admin.delete, body);
+};
