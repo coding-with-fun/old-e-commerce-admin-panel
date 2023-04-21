@@ -79,13 +79,7 @@ const AdminList = (): JSX.Element => {
                 width: '100%',
             }}
         >
-            <Box
-                sx={
-                    {
-                        // width: '100%',
-                    }
-                }
-            >
+            <Box>
                 <SearchFilter query={query ?? ''} setQuery={setQuery} />
 
                 <DataGrid
@@ -131,6 +125,7 @@ export default AdminList;
 
 export interface AdminListType {
     _id: any;
+    id: string;
     name: string;
     email: string;
     newEmail: string | undefined;
