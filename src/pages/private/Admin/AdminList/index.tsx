@@ -62,7 +62,6 @@ const AdminList = (): JSX.Element => {
     // When admin is deleted refetch the list
     useEffect(() => {
         if (fetchAdminList) {
-            console.log(fetchAdminList);
             refetch()
                 .then(() => {
                     dispatch(refetchAdminList(false));
