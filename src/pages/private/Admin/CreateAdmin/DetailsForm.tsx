@@ -10,15 +10,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { CreateAdminAPI } from '../../../../apis/admin';
-import { useAppDispatch } from '../../../../hooks/redux';
 import toast from '../../../../libs/toast';
-import { refetchAdminList } from '../../../../redux/slice/global.slice';
 import routes from '../../../../router/routes';
 import Avatar from './Avatar';
 import schema from './formValidator';
 
 const DetailsForm = (): JSX.Element => {
-    const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     // New profile picture selected
@@ -58,7 +55,6 @@ const DetailsForm = (): JSX.Element => {
                     },
                     onSuccess: (data) => {
                         toast(_.get(data, 'message', ''), 'success');
-                        dispatch(refetchAdminList(true));
                         navigate(routes.private.admin.list);
                     },
                 }
