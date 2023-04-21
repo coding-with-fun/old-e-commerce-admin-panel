@@ -26,6 +26,7 @@ a {
 }
 
 .MuiDataGrid-cell:focus,
-.MuiDataGrid-cell:focus-within {
+.MuiDataGrid-cell:focus-within,
+.MuiDataGrid-columnHeader:focus {
     outline: none !important;
 }

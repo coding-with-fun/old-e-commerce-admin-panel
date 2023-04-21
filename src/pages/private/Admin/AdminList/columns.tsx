@@ -1,6 +1,7 @@
 import { type GridColDef } from '@mui/x-data-grid';
 import ActivationSwitch from './ActivationSwitch';
 import ActionButtons from './ActionButtons';
+import dayjs from 'dayjs';
 
 const columns: GridColDef[] = [
     {
@@ -26,7 +27,10 @@ const columns: GridColDef[] = [
     {
         field: 'createdAt',
         headerName: 'Created At',
-        width: 150,
+        width: 200,
+        valueFormatter(params) {
+            return dayjs(params.value).format('DD MMMM YYYY, hh:mm A');
+        },
     },
     {
         field: 'isActive',
