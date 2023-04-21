@@ -8,13 +8,14 @@ import DeleteAccount from '../../../../assets/deleteAccount.png';
 import { useAppDispatch } from '../../../../hooks/redux';
 import toast from '../../../../libs/toast';
 import { refetchAdminList } from '../../../../redux/slice/global.slice';
+import PageLoader from '../../../../components/PageLoader';
 
 const DeleteAdminPopup = (props: IProps): JSX.Element => {
     const { adminId, handleCloseModal } = props;
 
     const dispatch = useAppDispatch();
 
-    const { mutate } = useMutation({
+    const { mutate, isLoading } = useMutation({
         mutationFn: DeleteAdminAPI,
     });
 
@@ -25,6 +26,7 @@ const DeleteAdminPopup = (props: IProps): JSX.Element => {
             },
             {
                 onSuccess: () => {
+                    handleCloseModal();
                     dispatch(refetchAdminList(true));
                 },
                 onError: (error) => {
@@ -34,7 +36,9 @@ const DeleteAdminPopup = (props: IProps): JSX.Element => {
         );
     };
 
-    return (
+    return isLoading ? (
+        <PageLoader />
+    ) : (
         <Box
             sx={{
                 px: '1rem',
