@@ -1,5 +1,6 @@
 import { type GridColDef } from '@mui/x-data-grid';
 import ActivationSwitch from './ActivationSwitch';
+import SeeDetails from './SeeDetails';
 
 const columns: GridColDef[] = [
     {
@@ -26,8 +27,13 @@ const columns: GridColDef[] = [
         field: 'isActive',
         headerName: 'Is active',
         sortable: false,
-        // align: 'center',
         renderCell: ActivationSwitch,
+    },
+    {
+        field: 'actions',
+        headerName: 'Actions',
+        sortable: false,
+        renderCell: SeeDetails,
     },
 ];
 

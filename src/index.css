@@ -24,3 +24,8 @@ body {
 a {
     color: var(--link-color);
 }
+
+.MuiDataGrid-cell:focus,
+.MuiDataGrid-cell:focus-within {
+    outline: none !important;
+}
