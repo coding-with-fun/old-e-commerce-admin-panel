@@ -16,3 +16,9 @@ export const FetchAdminListAPI = async (
             }&sortBy=${field}&query=${encodeURIComponent(query)}`
     );
 };
+
+export const ToggleAdminActivationAPI = async (body: {
+    adminId: string;
+}): Promise<AxiosResponse<any, any>> => {
+    return await axiosInstance.post(endpoints.admin.toggleActivation, body);
+};

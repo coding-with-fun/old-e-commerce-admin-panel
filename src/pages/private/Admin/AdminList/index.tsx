@@ -1,52 +1,12 @@
 import Box from '@mui/material/Box';
-import Switch from '@mui/material/Switch';
-import {
-    DataGrid,
-    type GridColDef,
-    type GridSortModel,
-} from '@mui/x-data-grid';
+import { DataGrid, type GridSortModel } from '@mui/x-data-grid';
 import { useQuery } from '@tanstack/react-query';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { FetchAdminListAPI } from '../../../../apis/admin';
 import NoRowsOverlay from './NoRowsOverlay';
 import SearchFilter from './SearchFilter';
-
-const columns: GridColDef[] = [
-    {
-        field: '_id',
-        headerName: 'ID',
-        width: 250,
-    },
-    {
-        field: 'contactNumber',
-        headerName: 'Contact number',
-        width: 150,
-    },
-    {
-        field: 'email',
-        headerName: 'Email',
-        width: 150,
-    },
-    {
-        field: 'name',
-        headerName: 'Name',
-        width: 150,
-    },
-    {
-        field: 'isActive',
-        headerName: 'Is active',
-        sortable: false,
-        renderCell(params) {
-            return (
-                <Switch
-                    checked={params.row.isActive}
-                    disabled={params.row.isSuperAdmin}
-                />
-            );
-        },
-    },
-];
+import columns from './columns';
 
 const AdminList = (): JSX.Element => {
     const [query, setQuery] = useState('');

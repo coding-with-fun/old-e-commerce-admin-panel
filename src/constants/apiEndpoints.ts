@@ -14,6 +14,7 @@ const endpoints = {
     },
     admin: {
         list: '/admin/list',
+        toggleActivation: '/admin/toggle-activation',
     },
     common: {
         verifyEmail: '/verify-email',
