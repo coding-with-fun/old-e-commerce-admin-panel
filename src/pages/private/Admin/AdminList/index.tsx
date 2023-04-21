@@ -19,12 +19,7 @@ const AdminList = (): JSX.Element => {
     const [query, setQuery] = useState('');
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(10);
-    const [sortModel, setSortModel] = useState<GridSortModel>([
-        {
-            field: 'createdAt',
-            sort: 'desc',
-        },
-    ]);
+    const [sortModel, setSortModel] = useState<GridSortModel>([]);
 
     const [adminsList, setAdminsList] = useState<AdminListType[]>([]);
 
@@ -62,13 +57,8 @@ const AdminList = (): JSX.Element => {
     // When admin is deleted refetch the list
     useEffect(() => {
         if (fetchAdminList) {
-            refetch()
-                .then(() => {
-                    dispatch(refetchAdminList(false));
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+            void refetch();
+            dispatch(refetchAdminList(false));
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
