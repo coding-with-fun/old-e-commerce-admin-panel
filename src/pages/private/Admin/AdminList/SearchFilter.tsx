@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import InputBase from '@mui/material/InputBase';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import routes from '../../../../router/routes';
 import {
@@ -17,10 +17,11 @@ import { type AxiosResponse } from 'axios';
 import { Typography } from '@mui/material';
 
 const SearchFilter = (props: IProps): JSX.Element => {
-    const { query, dataUpdated, setQuery, refetch } = props;
+    const { query, dataUpdated, setQuery, setPage, refetch } = props;
 
     const navigate = useNavigate();
 
+    const [tempQuery, setTempQuery] = useState<string>(query);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
 
@@ -30,6 +31,20 @@ const SearchFilter = (props: IProps): JSX.Element => {
     const handleClose = (): void => {
         setAnchorEl(null);
     };
+
+    // Search query debounce
+    useEffect(() => {
+        const getData = setTimeout(() => {
+            setQuery(tempQuery);
+            setPage(1);
+        }, 1000);
+
+        return () => {
+            clearTimeout(getData);
+        };
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tempQuery]);
 
     return (
         <Box
@@ -65,9 +80,9 @@ const SearchFilter = (props: IProps): JSX.Element => {
                 </Box>
                 <InputBase
                     placeholder="Search"
-                    value={query}
+                    value={tempQuery}
                     onChange={(event) => {
-                        setQuery(event.target.value);
+                        setTempQuery(event.target.value);
                     }}
                 />
             </Box>
@@ -150,7 +165,8 @@ export default SearchFilter;
 interface IProps {
     query: string;
     dataUpdated: boolean;
-    setQuery: React.Dispatch<React.SetStateAction<string | undefined>>;
+    setQuery: React.Dispatch<React.SetStateAction<string>>;
+    setPage: React.Dispatch<React.SetStateAction<number>>;
     refetch: <TPageData>(
         options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
     ) => Promise<QueryObserverResult<AxiosResponse<any, any>, unknown>>;

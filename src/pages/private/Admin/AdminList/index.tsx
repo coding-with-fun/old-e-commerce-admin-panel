@@ -18,7 +18,7 @@ const AdminList = (): JSX.Element => {
     const dispatch = useAppDispatch();
     const socket = useContext(SocketContext);
 
-    const [query, setQuery] = useState<string | undefined>();
+    const [query, setQuery] = useState<string>('');
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalData, setTotalData] = useState(10);
@@ -48,22 +48,14 @@ const AdminList = (): JSX.Element => {
             setTotalData(_.get(data, 'filter.total', 0));
             setDataUpdated(false);
         },
+        enabled: false,
     });
 
-    // Search query debounce
     useEffect(() => {
-        const getData = setTimeout(() => {
-            if (query !== undefined) {
-                void refetch();
-            }
-        }, 1000);
-
-        return () => {
-            clearTimeout(getData);
-        };
+        void refetch();
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [query]);
+    }, [query, page, pageSize, sortModel]);
 
     // When admin is deleted refetch the list
     useEffect(() => {
@@ -102,9 +94,10 @@ const AdminList = (): JSX.Element => {
                 }}
             >
                 <SearchFilter
-                    query={query ?? ''}
+                    query={query}
                     dataUpdated={dataUpdated}
                     setQuery={setQuery}
+                    setPage={setPage}
                     refetch={refetch}
                 />
 
