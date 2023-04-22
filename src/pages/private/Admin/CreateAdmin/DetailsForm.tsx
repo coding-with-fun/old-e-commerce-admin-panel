@@ -86,6 +86,7 @@ const DetailsForm = (): JSX.Element => {
                     >
                         <TextField
                             fullWidth
+                            autoFocus
                             id="name"
                             label="Name"
                             variant="outlined"

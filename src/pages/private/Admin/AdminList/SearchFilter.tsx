@@ -1,3 +1,4 @@
+import CachedIcon from '@mui/icons-material/Cached';
 import SearchIcon from '@mui/icons-material/Search';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -7,9 +8,16 @@ import MenuItem from '@mui/material/MenuItem';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import routes from '../../../../router/routes';
+import {
+    type QueryObserverResult,
+    type RefetchOptions,
+    type RefetchQueryFilters,
+} from '@tanstack/react-query';
+import { type AxiosResponse } from 'axios';
+import { Typography } from '@mui/material';
 
 const SearchFilter = (props: IProps): JSX.Element => {
-    const { query, setQuery } = props;
+    const { query, dataUpdated, setQuery, refetch } = props;
 
     const navigate = useNavigate();
 
@@ -72,6 +80,28 @@ const SearchFilter = (props: IProps): JSX.Element => {
                     gap: '1rem',
                 }}
             >
+                {dataUpdated ? (
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            gap: '1rem',
+                        }}
+                    >
+                        <Typography>Data updated</Typography>
+
+                        <CachedIcon
+                            sx={{
+                                cursor: 'pointer',
+                            }}
+                            onClick={() => {
+                                void refetch();
+                            }}
+                        />
+                    </Box>
+                ) : null}
+
                 <Box>
                     <Button
                         id="add-admin-button"
@@ -119,5 +149,9 @@ export default SearchFilter;
 
 interface IProps {
     query: string;
+    dataUpdated: boolean;
     setQuery: React.Dispatch<React.SetStateAction<string | undefined>>;
+    refetch: <TPageData>(
+        options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
+    ) => Promise<QueryObserverResult<AxiosResponse<any, any>, unknown>>;
 }

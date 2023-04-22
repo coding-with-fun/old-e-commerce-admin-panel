@@ -2,23 +2,26 @@ import Box from '@mui/material/Box';
 import { DataGrid, type GridSortModel } from '@mui/x-data-grid';
 import { useQuery } from '@tanstack/react-query';
 import _ from 'lodash';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { FetchAdminListAPI } from '../../../../apis/admin';
+import { SocketContext } from '../../../../context/socket';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
+import { refetchAdminList } from '../../../../redux/slice/global.slice';
 import NoRowsOverlay from './NoRowsOverlay';
 import SearchFilter from './SearchFilter';
 import columns from './columns';
-import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
-import { refetchAdminList } from '../../../../redux/slice/global.slice';
 
 const AdminList = (): JSX.Element => {
     const fetchAdminList = useAppSelector(
         (state) => state.global.fetchAdminList
     );
     const dispatch = useAppDispatch();
+    const socket = useContext(SocketContext);
 
     const [query, setQuery] = useState<string | undefined>();
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(10);
+    const [totalData, setTotalData] = useState(10);
     const [sortModel, setSortModel] = useState<GridSortModel>([
         {
             field: 'createdAt',
@@ -27,8 +30,9 @@ const AdminList = (): JSX.Element => {
     ]);
 
     const [adminsList, setAdminsList] = useState<AdminListType[]>([]);
+    const [dataUpdated, setDataUpdated] = useState(false);
 
-    const { isLoading, isFetching, data, isError, refetch } = useQuery({
+    const { isLoading, isFetching, isError, refetch } = useQuery({
         queryFn: async () =>
             await FetchAdminListAPI(
                 page + 1,
@@ -41,6 +45,8 @@ const AdminList = (): JSX.Element => {
         keepPreviousData: false,
         onSuccess(data) {
             setAdminsList(_.get(data, 'admins', []));
+            setTotalData(_.get(data, 'pagination.total', 0));
+            setDataUpdated(false);
         },
     });
 
@@ -69,6 +75,17 @@ const AdminList = (): JSX.Element => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fetchAdminList]);
 
+    // Listen to socket events
+    useEffect(() => {
+        socket.on('new_admin', () => {
+            setDataUpdated(true);
+        });
+
+        return () => {
+            socket.off('new_admin');
+        };
+    }, [socket]);
+
     return isError ? (
         <div>Something went wrong.</div>
     ) : (
@@ -84,7 +101,12 @@ const AdminList = (): JSX.Element => {
                     maxWidth: '100%',
                 }}
             >
-                <SearchFilter query={query ?? ''} setQuery={setQuery} />
+                <SearchFilter
+                    query={query ?? ''}
+                    dataUpdated={dataUpdated}
+                    setQuery={setQuery}
+                    refetch={refetch}
+                />
 
                 <DataGrid
                     autoHeight
@@ -97,7 +119,7 @@ const AdminList = (): JSX.Element => {
                     rows={adminsList}
                     columns={columns}
                     loading={isLoading || isFetching}
-                    rowCount={_.get(data, 'pagination.total', 0)}
+                    rowCount={totalData}
                     initialState={{
                         pagination: {
                             paginationModel: {
