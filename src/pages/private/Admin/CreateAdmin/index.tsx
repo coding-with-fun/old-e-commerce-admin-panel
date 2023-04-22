@@ -20,14 +20,24 @@ const CreateAdmin = (): JSX.Element => {
                     width: '450px',
                 }}
             >
-                <ArrowBackIcon
+                <Box
+                    sx={{
+                        backgroundColor: '#1976d2',
+                        width: 'fit-content',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        padding: 0.5,
+                        borderRadius: '3px',
+                        color: '#fff',
+                        cursor: 'pointer',
+                    }}
                     onClick={() => {
                         navigate(-1);
                     }}
-                    sx={{
-                        cursor: 'pointer',
-                    }}
-                />
+                >
+                    <ArrowBackIcon />
+                </Box>
             </Box>
 
             <Box
