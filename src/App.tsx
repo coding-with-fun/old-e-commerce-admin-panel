@@ -1,15 +1,19 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import _ from 'lodash';
+import { useContext, useEffect } from 'react';
 import { RouterProvider } from 'react-router-dom';
-import router from './router';
-import { useEffect } from 'react';
 import { GetProfileAPI } from './apis/profile';
 import { useAppDispatch } from './hooks/redux';
 import { setUserDetails } from './redux/slice/user.slice';
-import _ from 'lodash';
+import router from './router';
 import { getUserToken } from './utils/manageUserToken';
+import { SocketContext } from './context/socket';
 
 const App = (): JSX.Element => {
     const dispatch = useAppDispatch();
+
+    const socket = useContext(SocketContext);
+
     const queryClient = new QueryClient({
         defaultOptions: {
             queries: {
@@ -28,6 +32,18 @@ const App = (): JSX.Element => {
         if (token != null && token !== '') {
             void handleGetProfile();
         }
+
+        socket.on('connect', () => {
+            console.log(socket.id);
+        });
+        socket.on('disconnect', () => {
+            console.log('User disconnected...');
+        });
+
+        return () => {
+            socket.off('connect');
+            socket.off('disconnect');
+        };
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
