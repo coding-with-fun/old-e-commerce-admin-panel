@@ -77,12 +77,12 @@ const AdminList = (): JSX.Element => {
 
     // Listen to socket events
     useEffect(() => {
-        socket.on('new_admin', () => {
+        socket.on('entry_updated', () => {
             setDataUpdated(true);
         });
 
         return () => {
-            socket.off('new_admin');
+            socket.off('entry_updated');
         };
     }, [socket]);
 
