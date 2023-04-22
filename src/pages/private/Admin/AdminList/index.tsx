@@ -45,7 +45,7 @@ const AdminList = (): JSX.Element => {
         keepPreviousData: false,
         onSuccess(data) {
             setAdminsList(_.get(data, 'admins', []));
-            setTotalData(_.get(data, 'pagination.total', 0));
+            setTotalData(_.get(data, 'filter.total', 0));
             setDataUpdated(false);
         },
     });
