@@ -10,6 +10,7 @@ const routes = {
         profile: '/profile',
         admin: {
             list: '/admin',
+            details: '/admin/:adminID',
             create: '/admin/create',
         },
     },

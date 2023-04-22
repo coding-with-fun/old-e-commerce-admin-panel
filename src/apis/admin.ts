@@ -17,6 +17,12 @@ export const FetchAdminListAPI = async (
     );
 };
 
+export const GetAdminDetailsAPI = async (
+    adminId: string
+): Promise<AxiosResponse<any, any>> => {
+    return await axiosInstance.get(endpoints.admin.details + adminId);
+};
+
 export const ToggleAdminActivationAPI = async (body: {
     adminId: string;
 }): Promise<AxiosResponse<any, any>> => {

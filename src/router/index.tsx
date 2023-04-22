@@ -27,6 +27,9 @@ const Profile = React.lazy(
 const AdminList = React.lazy(
     async () => await import('../pages/private/Admin/AdminList')
 );
+const AdminDetails = React.lazy(
+    async () => await import('../pages/private/Admin/AdminDetails')
+);
 const CreateAdmin = React.lazy(
     async () => await import('../pages/private/Admin/CreateAdmin')
 );
@@ -83,6 +86,12 @@ const router = createBrowserRouter([
                 path: routes.private.admin.create,
                 element: (
                     <ProtectedRoute>{lazyLoad(CreateAdmin)}</ProtectedRoute>
+                ),
+            },
+            {
+                path: routes.private.admin.details,
+                element: (
+                    <ProtectedRoute>{lazyLoad(AdminDetails)}</ProtectedRoute>
                 ),
             },
 

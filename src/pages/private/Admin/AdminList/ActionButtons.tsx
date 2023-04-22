@@ -6,12 +6,16 @@ import {
     type GridTreeNodeWithRender,
 } from '@mui/x-data-grid';
 import { Fragment, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Modal from '../../../../components/HOC/Modal';
+import routes from '../../../../router/routes';
 import DeleteAdminPopup from './DeleteAdminPopup';
 
 const ActionButtons = (
     params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>
 ): JSX.Element => {
+    const navigate = useNavigate();
+
     // Modal flags
     const [cleanModalContent, setCleanModalContent] = useState(false);
 
@@ -28,6 +32,10 @@ const ActionButtons = (
         handleOpenAdminDeleteModal();
     };
 
+    const handleViewAdminDetails = (): void => {
+        navigate(`${routes.private.admin.list}/${params.id}`);
+    };
+
     return (
         <Fragment>
             <Box
@@ -41,6 +49,7 @@ const ActionButtons = (
                         color: 'rgba(0, 0, 0, 0.54)',
                         cursor: 'pointer',
                     }}
+                    onClick={handleViewAdminDetails}
                 />
 
                 {params.row.isSuperAdmin === true ? null : (
