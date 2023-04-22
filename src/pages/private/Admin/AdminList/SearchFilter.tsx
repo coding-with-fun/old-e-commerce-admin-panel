@@ -36,7 +36,7 @@ const SearchFilter = (props: IProps): JSX.Element => {
     useEffect(() => {
         const getData = setTimeout(() => {
             setQuery(tempQuery);
-            setPage(1);
+            setPage('1');
         }, 1000);
 
         return () => {
@@ -170,7 +170,7 @@ interface IProps {
     query: string;
     dataUpdated: boolean;
     setQuery: React.Dispatch<React.SetStateAction<string>>;
-    setPage: React.Dispatch<React.SetStateAction<number>>;
+    setPage: React.Dispatch<React.SetStateAction<string>>;
     refetch: <TPageData>(
         options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
     ) => Promise<QueryObserverResult<AxiosResponse<any, any>, unknown>>;
