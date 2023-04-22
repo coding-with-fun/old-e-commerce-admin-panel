@@ -47,6 +47,7 @@ const DetailsForm = (): JSX.Element => {
             mutate(
                 {
                     ...values,
+                    contactNumber: '+91' + values.contactNumber,
                     profilePictureId: newAvatar._id,
                 },
                 {

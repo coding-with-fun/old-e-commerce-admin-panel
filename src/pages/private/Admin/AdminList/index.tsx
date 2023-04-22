@@ -19,7 +19,7 @@ const AdminList = (): JSX.Element => {
     const socket = useContext(SocketContext);
 
     const [query, setQuery] = useState<string | undefined>();
-    const [page, setPage] = useState(0);
+    const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalData, setTotalData] = useState(10);
     const [sortModel, setSortModel] = useState<GridSortModel>([
@@ -35,7 +35,7 @@ const AdminList = (): JSX.Element => {
     const { isLoading, isFetching, isError, refetch } = useQuery({
         queryFn: async () =>
             await FetchAdminListAPI(
-                page + 1,
+                page,
                 pageSize,
                 sortModel[0]?.field ?? 'createdAt',
                 sortModel[0]?.sort ?? 'desc',
@@ -124,12 +124,12 @@ const AdminList = (): JSX.Element => {
                         pagination: {
                             paginationModel: {
                                 pageSize,
-                                page,
+                                page: page - 1,
                             },
                         },
                     }}
                     onPaginationModelChange={(model) => {
-                        setPage(model.page);
+                        setPage(model.page + 1);
                         setPageSize(model.pageSize);
                     }}
                     pageSizeOptions={[1, 5, 10, 25]}
