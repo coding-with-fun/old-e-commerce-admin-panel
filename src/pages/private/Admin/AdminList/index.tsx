@@ -10,6 +10,7 @@ import { refetchAdminList } from '../../../../redux/slice/global.slice';
 import NoRowsOverlay from './NoRowsOverlay';
 import SearchFilter from './SearchFilter';
 import columns from './columns';
+import { useSearchParams } from 'react-router-dom';
 
 const AdminList = (): JSX.Element => {
     const fetchAdminList = useAppSelector(
@@ -17,6 +18,7 @@ const AdminList = (): JSX.Element => {
     );
     const dispatch = useAppDispatch();
     const socket = useContext(SocketContext);
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const [query, setQuery] = useState<string>('');
     const [page, setPage] = useState(1);
@@ -28,6 +30,7 @@ const AdminList = (): JSX.Element => {
             sort: 'desc',
         },
     ]);
+    const [areFiltersSet, setAreFiltersSet] = useState(false);
 
     const [adminsList, setAdminsList] = useState<AdminListType[]>([]);
     const [dataUpdated, setDataUpdated] = useState(false);
@@ -47,15 +50,34 @@ const AdminList = (): JSX.Element => {
             setAdminsList(_.get(data, 'admins', []));
             setTotalData(_.get(data, 'filter.total', 0));
             setDataUpdated(false);
+
+            setSearchParams({
+                query: _.get(data, 'filter.query', ''),
+            });
+
+            // setAreFiltersSet(false);
         },
         enabled: false,
     });
 
+    // Update state with the search params
     useEffect(() => {
-        void refetch();
+        const searchParamQuery = searchParams.get('query') ?? '';
+        setQuery(searchParamQuery);
+
+        setAreFiltersSet(true);
+    }, [searchParams]);
+
+    useEffect(() => {
+        if (areFiltersSet) {
+            console.log('API CALLED');
+            console.log(query);
+
+            void refetch();
+        }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [query, page, pageSize, sortModel]);
+    }, [query, page, pageSize, sortModel, areFiltersSet]);
 
     // When admin is deleted refetch the list
     useEffect(() => {
@@ -93,13 +115,15 @@ const AdminList = (): JSX.Element => {
                     maxWidth: '100%',
                 }}
             >
-                <SearchFilter
-                    query={query}
-                    dataUpdated={dataUpdated}
-                    setQuery={setQuery}
-                    setPage={setPage}
-                    refetch={refetch}
-                />
+                {isLoading ? null : (
+                    <SearchFilter
+                        query={query}
+                        dataUpdated={dataUpdated}
+                        setQuery={setQuery}
+                        setPage={setPage}
+                        refetch={refetch}
+                    />
+                )}
 
                 <DataGrid
                     autoHeight

@@ -1,20 +1,20 @@
 import CachedIcon from '@mui/icons-material/Cached';
 import SearchIcon from '@mui/icons-material/Search';
+import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import InputBase from '@mui/material/InputBase';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import routes from '../../../../router/routes';
 import {
     type QueryObserverResult,
     type RefetchOptions,
     type RefetchQueryFilters,
 } from '@tanstack/react-query';
 import { type AxiosResponse } from 'axios';
-import { Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import routes from '../../../../router/routes';
 
 const SearchFilter = (props: IProps): JSX.Element => {
     const { query, dataUpdated, setQuery, setPage, refetch } = props;
@@ -45,6 +45,10 @@ const SearchFilter = (props: IProps): JSX.Element => {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tempQuery]);
+
+    useEffect(() => {
+        setTempQuery(query);
+    }, [query]);
 
     return (
         <Box
