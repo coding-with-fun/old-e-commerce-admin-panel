@@ -23,7 +23,7 @@ const AdminList = (): JSX.Element => {
     const [query, setQuery] = useState<string>('');
     const [page, setPage] = useState('1');
     const [pageSize, setPageSize] = useState('10');
-    const [totalData, setTotalData] = useState(10);
+    const [totalData, setTotalData] = useState(0);
     const [sortField, setSortField] = useState('createdAt');
     const [sortDirection, setSortDirection] =
         useState<GridSortDirection>('desc');
@@ -42,7 +42,7 @@ const AdminList = (): JSX.Element => {
                 query ?? ''
             ),
         queryKey: ['FetchAdminList'],
-        keepPreviousData: false,
+        keepPreviousData: true,
         onSuccess(data) {
             setAdminsList(_.get(data, 'admins', []));
             setTotalData(_.get(data, 'filter.total', 0));
@@ -84,14 +84,11 @@ const AdminList = (): JSX.Element => {
 
     useEffect(() => {
         if (areFiltersSet) {
-            console.log('API CALLED');
-            console.log(query);
-
             void refetch();
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [query, page, pageSize, areFiltersSet]);
+    }, [query, page, pageSize, sortField, sortDirection, areFiltersSet]);
 
     // When admin is deleted refetch the list
     useEffect(() => {
@@ -146,19 +143,18 @@ const AdminList = (): JSX.Element => {
                     disableColumnSelector
                     disableDensitySelector
                     disableRowSelectionOnClick
+                    keepNonExistentRowsSelected
+                    pagination
                     getRowId={(row) => row._id}
                     rows={adminsList}
                     columns={columns}
                     loading={isLoading || isFetching}
                     rowCount={totalData}
-                    initialState={{
-                        pagination: {
-                            paginationModel: {
-                                pageSize: +pageSize,
-                                page: +page - 1,
-                            },
-                        },
+                    paginationModel={{
+                        pageSize: +pageSize,
+                        page: +page - 1,
                     }}
+                    paginationMode="server"
                     onPaginationModelChange={(model) => {
                         setPage(`${model.page + 1}`);
                         setPageSize(`${model.pageSize}`);
@@ -170,9 +166,15 @@ const AdminList = (): JSX.Element => {
                             sort: sortDirection,
                         },
                     ]}
+                    sortingMode="server"
                     onSortModelChange={(newSortModel) => {
-                        setSortField(newSortModel[0].field);
-                        setSortDirection(newSortModel[0].sort);
+                        setPage('1');
+                        setSortField(
+                            _.get(newSortModel[0], 'field', 'createdAt')
+                        );
+                        setSortDirection(
+                            _.get(newSortModel[0], 'sort', 'desc')
+                        );
                     }}
                     slots={{
                         noResultsOverlay: NoRowsOverlay,

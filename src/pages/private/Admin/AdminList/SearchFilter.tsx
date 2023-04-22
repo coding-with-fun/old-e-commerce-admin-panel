@@ -12,7 +12,7 @@ import {
     type RefetchQueryFilters,
 } from '@tanstack/react-query';
 import { type AxiosResponse } from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import routes from '../../../../router/routes';
 
@@ -20,6 +20,8 @@ const SearchFilter = (props: IProps): JSX.Element => {
     const { query, dataUpdated, setQuery, setPage, refetch } = props;
 
     const navigate = useNavigate();
+
+    const initialRender = useRef(true);
 
     const [tempQuery, setTempQuery] = useState<string>(query);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -35,8 +37,12 @@ const SearchFilter = (props: IProps): JSX.Element => {
     // Search query debounce
     useEffect(() => {
         const getData = setTimeout(() => {
-            setQuery(tempQuery);
-            setPage('1');
+            if (initialRender.current) {
+                initialRender.current = false;
+            } else {
+                setQuery(tempQuery);
+                setPage('1');
+            }
         }, 1000);
 
         return () => {
