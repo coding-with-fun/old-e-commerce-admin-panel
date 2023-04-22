@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
 import { DrawerHeader } from './Navbar/Sidebar';
+import Sockets from '../socket';
 
 const Layout = (): JSX.Element => {
     const [openSideBar, setOpenSideBar] = useState(false);
@@ -13,6 +14,8 @@ const Layout = (): JSX.Element => {
                 display: 'flex',
             }}
         >
+            <Sockets />
+
             <Navbar openSideBar={openSideBar} setOpenSideBar={setOpenSideBar} />
 
             <Box

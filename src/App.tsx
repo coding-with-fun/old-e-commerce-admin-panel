@@ -3,11 +3,11 @@ import _ from 'lodash';
 import { useContext, useEffect } from 'react';
 import { RouterProvider } from 'react-router-dom';
 import { GetProfileAPI } from './apis/profile';
+import { SocketContext } from './context/socket';
 import { useAppDispatch } from './hooks/redux';
 import { setUserDetails } from './redux/slice/user.slice';
 import router from './router';
 import { getUserToken } from './utils/manageUserToken';
-import { SocketContext } from './context/socket';
 
 const App = (): JSX.Element => {
     const dispatch = useAppDispatch();

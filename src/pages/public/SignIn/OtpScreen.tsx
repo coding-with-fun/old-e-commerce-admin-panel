@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { useMutation } from '@tanstack/react-query';
 import _ from 'lodash';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useContext, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { VerifySignInOtpAPI } from '../../../apis/auth';
 import OtpInput from '../../../components/OtpInput';
@@ -11,11 +11,14 @@ import { useAppDispatch } from '../../../hooks/redux';
 import toast from '../../../libs/toast';
 import { setUserDetails } from '../../../redux/slice/user.slice';
 import routes from '../../../router/routes';
+import { SocketContext } from '../../../context/socket';
 
 const OtpScreen = (props: PropTypes): JSX.Element => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const [params] = useSearchParams();
+
+    const socket = useContext(SocketContext);
 
     const otpLength = 4;
     const initialOtp: string[] = [];
@@ -45,6 +48,7 @@ const OtpScreen = (props: PropTypes): JSX.Element => {
                 onSuccess: (data) => {
                     toast(_.get(data, 'message', ''), 'success');
                     dispatch(setUserDetails(_.get(data, 'admin', {})));
+                    socket.emit('new_user_signin', data);
                     navigate(redirectionUrl, {
                         replace: true,
                     });
